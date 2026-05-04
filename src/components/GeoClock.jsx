@@ -69,10 +69,10 @@ function computeAngleDeg(hour, direction) {
 
 function computeCivilAngleDeg(hour) {
   // Aro civil fijo (no depende del hemisferio):
-  // 12 arriba, 24(0) abajo, 6 derecha, 18 izquierda.
+  // 12 arriba, 24(0) abajo, 6 izquierda, 18 derecha.
   const h = ((hour % 24) + 24) % 24
   // SVG: 0° derecha, -90° arriba
-  return -90 - 15 * (h - 12)
+  return -90 + 15 * (h - 12)
 }
 
 function MoonPhaseGlyph({ cx, cy, r, phase }) {
