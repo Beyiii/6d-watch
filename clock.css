@@ -1,0 +1,218 @@
+/* ─── Google Font: Nunito (redondeado, gordito) ─────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap');
+
+/* ─── Variables ─────────────────────────────────────────────────────────────── */
+:root {
+  /* Reloj civil */
+  --civil-border:       #c8c8c8;
+  --civil-face:         #f5f0e8;       /* antiquewhite suavizado */
+  --civil-shadow-out:   rgba(0,0,0,0.35);
+  --civil-shadow-in:    rgba(0,0,0,0.18);
+  --civil-num-major:    #4a4a4a;       /* 12, 3, 6, 9 → gris oscuro */
+  --civil-num-minor:    #9a9a9a;       /* resto → gris medio */
+  --civil-hand:         #333;
+  --civil-second:       #c0392b;
+  --civil-center:       #222;
+
+  /* Reloj geométrico */
+  --geo-border:         #2a2a2a;
+  --geo-face:           #1a1a1a;       /* gris muy oscuro */
+  --geo-shadow-out:     rgba(0,0,0,0.6);
+  --geo-shadow-in:      rgba(0,0,0,0.5);
+  --geo-num-major:      #e8dcc8;       /* cremita */
+  --geo-num-minor:      #6a6a6a;       /* gris medio */
+  --geo-hand:           #d4c9b0;       /* cremita para manecillas */
+  --geo-second:         #8a8a8a;       /* gris para segundero */
+  --geo-center:         #c8bc9e;
+}
+
+/* ─── Contenedor de ambos relojes ───────────────────────────────────────────── */
+.clocks-wrapper {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 32px 0;
+}
+
+.clock-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.clock-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+/* ─── El reloj (forma base) ─────────────────────────────────────────────────── */
+.clock {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  position: relative;
+  border: 18px solid var(--civil-border);
+  background-color: var(--civil-face);
+
+  /* sombra exterior */
+  box-shadow:
+    6px 6px 18px var(--civil-shadow-out),
+    -3px -3px 10px rgba(255,255,255,0.5),
+    /* sombra interior simulando borde 3D */
+    inset 4px 4px 10px var(--civil-shadow-in),
+    inset -3px -3px 8px rgba(255,255,255,0.6);
+}
+
+.clock.geometric {
+  border-color: var(--geo-border);
+  background-color: var(--geo-face);
+
+  box-shadow:
+    6px 6px 20px var(--geo-shadow-out),
+    -2px -2px 8px rgba(80,80,80,0.2),
+    inset 4px 4px 12px var(--geo-shadow-in),
+    inset -2px -2px 6px rgba(60,60,60,0.3);
+}
+
+/* ─── Manecillas ────────────────────────────────────────────────────────────── */
+.hourHand,
+.minuteHand,
+.secondHand {
+  position: absolute;
+  transform-origin: bottom center;
+  border-radius: 4px;
+  left: 50%;
+}
+
+.hourHand {
+  width: 10px;
+  height: 72px;
+  background-color: var(--civil-hand);
+  top: calc(50% - 72px);
+  margin-left: -5px;
+  z-index: 10;
+  transition: transform 0.5s cubic-bezier(0.1, 2.7, 0.58, 1);
+}
+
+.minuteHand {
+  width: 6px;
+  height: 108px;
+  background-color: var(--civil-hand);
+  top: calc(50% - 108px);
+  margin-left: -3px;
+  z-index: 9;
+  transition: transform 0.5s cubic-bezier(0.1, 2.7, 0.58, 1);
+}
+
+.secondHand {
+  width: 2px;
+  height: 116px;
+  background-color: var(--civil-second);
+  top: calc(50% - 116px);
+  margin-left: -1px;
+  z-index: 8;
+  transition: transform 0.08s cubic-bezier(0.1, 2.7, 0.58, 1);
+}
+
+/* Manecillas del reloj geométrico */
+.clock.geometric .hourHand,
+.clock.geometric .minuteHand {
+  background-color: var(--geo-hand);
+}
+
+.clock.geometric .secondHand {
+  background-color: var(--geo-second);
+}
+
+/* ─── Centro ─────────────────────────────────────────────────────────────────── */
+.center {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--civil-center);
+  position: absolute;
+  left: calc(50% - 7px);
+  top: calc(50% - 7px);
+  z-index: 20;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.clock.geometric .center {
+  background-color: var(--geo-center);
+}
+
+/* ─── Números ────────────────────────────────────────────────────────────────── */
+.clock ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.clock ul li {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--civil-num-minor);
+}
+
+/* Números principales (12, 3, 6, 9) → más grandes y oscuros */
+.clock ul li:nth-child(3),
+.clock ul li:nth-child(6),
+.clock ul li:nth-child(9),
+.clock ul li:nth-child(12) {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--civil-num-major);
+}
+
+/* Números del reloj geométrico */
+.clock.geometric ul li {
+  color: var(--geo-num-minor);
+}
+
+.clock.geometric ul li:nth-child(3),
+.clock.geometric ul li:nth-child(6),
+.clock.geometric ul li:nth-child(9),
+.clock.geometric ul li:nth-child(12) {
+  color: var(--geo-num-major);
+}
+
+/* ─── Posiciones de los números (mismo layout original) ─────────────────────── */
+.clock ul li:nth-child(1)  { right: 22%;              top: 6.5%; }
+.clock ul li:nth-child(2)  { right: 6%;               top: 25%; }
+.clock ul li:nth-child(3)  { right: 0%;               top: calc(50% - 12px); }
+.clock ul li:nth-child(4)  { right: 6%;               top: 69%; }
+.clock ul li:nth-child(5)  { right: 22%;              top: 84%; }
+.clock ul li:nth-child(6)  { right: calc(50% - 12px); top: calc(99% - 24px); }
+.clock ul li:nth-child(7)  { left: 22%;               top: 84%; }
+.clock ul li:nth-child(8)  { left: 6%;                top: 69%; }
+.clock ul li:nth-child(9)  { left: 0%;                top: calc(50% - 12px); }
+.clock ul li:nth-child(10) { left: 6%;                top: 25%; }
+.clock ul li:nth-child(11) { left: 22%;               top: 6.5%; }
+.clock ul li:nth-child(12) { right: calc(50% - 12px); top: 1%; }
+
+/* ─── Display digital debajo de los relojes ─────────────────────────────────── */
+.clock-time-display {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.05em;
+  color: #555;
+  text-align: center;
+}
+
+.clock-time-display.geometric {
+  color: #c8bc9e;
+}
