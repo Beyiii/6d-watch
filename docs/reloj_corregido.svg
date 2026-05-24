@@ -1,0 +1,385 @@
+<svg width="861" height="869" viewBox="0 0 861 869" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 
+    6D-Watch - Reloj Geométrico Astronómico
+    Versión Reconstruida - Estructura Limpia
+    
+    GRUPOS PRINCIPALES:
+    - g#fondo: Círculo dorado exterior con efectos de sombra/glow
+    - g#disco-base: Disco negro base con líneas radiales
+    - g#anillo-horas: Anillo de 24 colores (horas del día)
+    - g#disco-central: Disco central negro
+    - g#yin-yang: Símbolo yin-yang con indicador
+    - g#fase-lunar: Contenedor de la fase lunar (intercambiable)
+    - g#numeros: Números de las horas alrededor del anillo
+  -->
+
+  <defs>
+    <!-- FILTROS DE SOMBRA/GLOW -->
+    <filter id="shadow-outer" x="0" y="0" width="860.683" height="868.641" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feMorphology radius="8.65767" operator="erode" in="SourceAlpha" result="effect1_dropShadow"/>
+      <feOffset dx="18.7583" dy="20.2012"/>
+      <feGaussianBlur stdDeviation="8.65767"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.5 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-28.8589" dy="-28.8589"/>
+      <feGaussianBlur stdDeviation="44.0098"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.282353 0 0 0 0 0.32549 0 0 0 0 0.360784 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feMorphology radius="46.1742" operator="erode" in="SourceAlpha" result="effect3_dropShadow"/>
+      <feOffset dx="27.4159" dy="36.0736"/>
+      <feGaussianBlur stdDeviation="66.3755"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.35 0"/>
+      <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect3_dropShadow" result="shape"/>
+    </filter>
+
+    <filter id="shadow-ring" x="0" y="0" width="859.859" height="867.815" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feMorphology radius="8.65767" operator="erode" in="SourceAlpha" result="effect1_dropShadow"/>
+      <feOffset dx="18.7583" dy="20.2012"/>
+      <feGaussianBlur stdDeviation="8.65767"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.5 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-28.8589" dy="-28.8589"/>
+      <feGaussianBlur stdDeviation="44.0098"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.282353 0 0 0 0 0.32549 0 0 0 0 0.360784 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feMorphology radius="46.1742" operator="erode" in="SourceAlpha" result="effect3_dropShadow"/>
+      <feOffset dx="27.4159" dy="36.0736"/>
+      <feGaussianBlur stdDeviation="66.3755"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.35 0"/>
+      <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect3_dropShadow" result="shape"/>
+    </filter>
+
+    <filter id="inner-shadow-disc" x="186.745" y="184.202" width="491.855" height="493.046" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="11.9172" dy="13.109"/>
+      <feGaussianBlur stdDeviation="17.8759"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.5 0"/>
+      <feBlend mode="normal" in2="shape" result="effect1_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="8.34207" dy="8.34207"/>
+      <feGaussianBlur stdDeviation="4.7669"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="effect1_innerShadow" result="effect2_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-14.3007" dy="-14.3007"/>
+      <feGaussianBlur stdDeviation="17.8759"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.282353 0 0 0 0 0.32549 0 0 0 0 0.360784 0 0 0 0.3 0"/>
+      <feBlend mode="normal" in2="effect2_innerShadow" result="effect3_innerShadow"/>
+    </filter>
+
+    <filter id="inner-shadow-indicator" x="385.503" y="283.918" width="87.0157" height="117.35" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="11.9172" dy="13.109"/>
+      <feGaussianBlur stdDeviation="17.8759"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.5 0"/>
+      <feBlend mode="normal" in2="shape" result="effect1_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="8.34207" dy="8.34207"/>
+      <feGaussianBlur stdDeviation="4.7669"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="effect1_innerShadow" result="effect2_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-14.3007" dy="-14.3007"/>
+      <feGaussianBlur stdDeviation="17.8759"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.282353 0 0 0 0 0.32549 0 0 0 0 0.360784 0 0 0 0.3 0"/>
+      <feBlend mode="normal" in2="effect2_innerShadow" result="effect3_innerShadow"/>
+    </filter>
+
+    <filter id="inner-shadow-moon-container" x="392.57" y="454.644" width="83.7685" height="84.9602" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feMorphology radius="1.19172" operator="dilate" in="SourceAlpha" result="effect1_innerShadow"/>
+      <feOffset dx="11.9172" dy="13.109"/>
+      <feGaussianBlur stdDeviation="17.8759"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.5 0"/>
+      <feBlend mode="normal" in2="shape" result="effect1_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="8.34207" dy="8.34207"/>
+      <feGaussianBlur stdDeviation="4.7669"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.137255 0 0 0 0 0.156863 0 0 0 0 0.176471 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="effect1_innerShadow" result="effect2_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-14.3007" dy="-14.3007"/>
+      <feGaussianBlur stdDeviation="17.8759"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.282353 0 0 0 0 0.32549 0 0 0 0 0.360784 0 0 0 0.3 0"/>
+      <feBlend mode="normal" in2="effect2_innerShadow" result="effect3_innerShadow"/>
+    </filter>
+
+    <filter id="inner-shadow-moon" x="410.416" y="451.362" width="68.3575" height="91.2504" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="14.652" dy="16.1172"/>
+      <feGaussianBlur stdDeviation="21.978"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.65098 0 0 0 0 0.705882 0 0 0 0 0.784314 0 0 0 0.71 0"/>
+      <feBlend mode="normal" in2="shape" result="effect1_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="10.2564" dy="10.2564"/>
+      <feGaussianBlur stdDeviation="5.86081"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.65098 0 0 0 0 0.705882 0 0 0 0 0.784314 0 0 0 0.52 0"/>
+      <feBlend mode="normal" in2="effect1_innerShadow" result="effect2_innerShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-17.5824" dy="-17.5824"/>
+      <feGaussianBlur stdDeviation="21.978"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"/>
+      <feBlend mode="normal" in2="effect2_innerShadow" result="effect3_innerShadow"/>
+    </filter>
+
+    <!-- GRADIENTES -->
+    <linearGradient id="grad-gold-outer" x1="141.791" y1="155.745" x2="714.307" y2="711.818" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0001" stop-color="#FFED79"/>
+      <stop offset="1" stop-color="#A66C45"/>
+    </linearGradient>
+
+    <linearGradient id="grad-gold-edge" x1="260.561" y1="253.559" x2="694.026" y2="744.704" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFECD5"/>
+      <stop offset="0.34134" stop-color="#D2AD5F"/>
+      <stop offset="0.875015" stop-color="#4A3023"/>
+    </linearGradient>
+
+    <linearGradient id="grad-disc-base" x1="152.922" y1="165.332" x2="704.624" y2="701.189" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0001" stop-color="#3E464F"/>
+      <stop offset="1" stop-color="#424A53"/>
+    </linearGradient>
+
+    <linearGradient id="grad-disc-stroke" x1="267.374" y1="259.59" x2="710.386" y2="715.594" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5D666D"/>
+      <stop offset="0.859375" stop-color="#232A30"/>
+    </linearGradient>
+
+    <linearGradient id="grad-ring-gold" x1="144.126" y1="156.031" x2="712.859" y2="706.55" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0001" stop-color="#FFED79"/>
+      <stop offset="1" stop-color="#A66C45"/>
+    </linearGradient>
+
+    <linearGradient id="grad-central-disc" x1="460.683" y1="-575.066" x2="1165.13" y2="1215.95" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#363E46"/>
+      <stop offset="1" stop-color="#2C343C"/>
+    </linearGradient>
+
+    <linearGradient id="grad-central-stroke" x1="612.621" y1="-89.136" x2="325.236" y2="-369.245" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5D666D"/>
+      <stop offset="1" stop-color="#232A30"/>
+    </linearGradient>
+
+    <linearGradient id="grad-yin-light" x1="443.119" y1="464.945" x2="442.139" y2="284.944" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD864"/>
+      <stop offset="1" stop-color="#FFF0C2"/>
+    </linearGradient>
+
+    <linearGradient id="grad-yin-dark" x1="379.258" y1="487.454" x2="270.798" y2="223.039" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#343C52"/>
+      <stop offset="1" stop-color="#4E587D"/>
+    </linearGradient>
+
+    <linearGradient id="grad-indicator" x1="561.579" y1="423.75" x2="328.309" y2="-5.30657" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#363E46"/>
+      <stop offset="1" stop-color="#2C343C"/>
+    </linearGradient>
+
+    <linearGradient id="grad-indicator-stroke" x1="408.628" y1="366.004" x2="457.177" y2="340.077" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5D666D"/>
+      <stop offset="1" stop-color="#232A30"/>
+    </linearGradient>
+
+    <linearGradient id="grad-moon-container" x1="484.465" y1="551.329" x2="263.103" y2="638.396" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#363E46"/>
+      <stop offset="1" stop-color="#2C343C"/>
+    </linearGradient>
+
+    <linearGradient id="grad-moon-container-stroke" x1="424.406" y1="570.108" x2="459.026" y2="534.588" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5D666D"/>
+      <stop offset="1" stop-color="#232A30"/>
+    </linearGradient>
+
+    <linearGradient id="grad-moon" x1="561.818" y1="542.102" x2="561.818" y2="484.07" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ECEEF3"/>
+      <stop offset="1" stop-color="#F1F2F7"/>
+    </linearGradient>
+
+    <!-- Gradiente para números dorados -->
+    <linearGradient id="grad-number-gold" x1="430" y1="130" x2="430" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF1B4"/>
+      <stop offset="1" stop-color="#FFC259"/>
+    </linearGradient>
+  </defs>
+
+  <g id="reloj">
+    <!-- ==================== FONDO - Círculo dorado exterior ==================== -->
+    <g id="fondo" filter="url(#shadow-outer)">
+      <path d="M117.874 430.792C117.874 257.423 258.417 116.88 431.786 116.88C605.155 116.88 745.699 257.423 745.699 430.792C745.699 604.161 605.155 744.704 431.786 744.704C258.417 744.704 117.874 604.161 117.874 430.792Z" fill="url(#grad-gold-outer)"/>
+      <path d="M431.786 116.88C464.708 116.948 497.528 122.157 528.754 132.383C654.969 172.057 746.908 298.638 744.795 430.792C748.621 597.515 598.332 747.539 431.786 743.499C265.24 747.539 114.952 597.515 118.778 430.792C118.778 430.792 118.778 430.792 118.778 430.792C116.664 298.638 208.604 172.057 334.819 132.383C366.045 122.156 398.864 116.948 431.786 116.88C398.865 116.788 365.994 121.843 334.677 131.948C208.101 171.093 115.167 297.845 116.97 430.792C116.97 430.792 116.97 430.792 116.97 430.792C112.665 598.487 263.915 750.001 431.786 745.91C431.786 745.91 431.786 745.91 431.786 745.91C431.786 745.91 431.786 745.91 431.786 745.91C599.658 750.001 750.908 598.487 746.603 430.792C746.603 430.792 746.603 430.792 746.603 430.792C748.406 297.845 655.472 171.093 528.895 131.948C497.579 121.843 464.708 116.788 431.786 116.88ZM431.786 116.88" fill="url(#grad-gold-edge)"/>
+    </g>
+
+    <!-- ==================== DISCO BASE - Negro con líneas radiales ==================== -->
+    <g id="disco-base">
+      <rect x="130.596" y="128.601" width="603.557" height="603.557" rx="301.779" fill="url(#grad-disc-base)" stroke="url(#grad-disc-stroke)" stroke-width="1.44294"/>
+      
+      <!-- Iluminación del 12 -->
+      <path d="M395.373 126.945H473.373L469.373 162.445H400.373L395.373 126.945Z" fill="#C7C7C7" fill-opacity="0.42"/>
+      
+      <!-- Líneas radiales de las 24 horas -->
+      
+      <!-- Líneas radiales alineadas con las 24 divisiones -->
+      <g id="lineas-radiales" stroke="#FFE8A3" stroke-width="1.2" stroke-linecap="round" opacity="0.78">
+
+        <line x1="431.500" y1="410.000" x2="431.500" y2="128.000" />
+        <line x1="436.159" y1="410.613" x2="509.146" y2="138.222" />
+        <line x1="440.500" y1="412.412" x2="581.500" y2="168.192" />
+        <line x1="444.228" y1="415.272" x2="643.632" y2="215.868" />
+        <line x1="447.088" y1="419.000" x2="691.308" y2="278.000" />
+        <line x1="448.887" y1="423.341" x2="721.278" y2="350.354" />
+        <line x1="449.500" y1="428.000" x2="731.500" y2="428.000" />
+        <line x1="448.887" y1="432.659" x2="721.278" y2="505.646" />
+        <line x1="447.088" y1="437.000" x2="691.308" y2="578.000" />
+        <line x1="444.228" y1="440.728" x2="643.632" y2="640.132" />
+        <line x1="440.500" y1="443.588" x2="581.500" y2="687.808" />
+        <line x1="436.159" y1="445.387" x2="509.146" y2="717.778" />
+        <line x1="431.500" y1="446.000" x2="431.500" y2="728.000" />
+        <line x1="426.841" y1="445.387" x2="353.854" y2="717.778" />
+        <line x1="422.500" y1="443.588" x2="281.500" y2="687.808" />
+        <line x1="418.772" y1="440.728" x2="219.368" y2="640.132" />
+        <line x1="415.912" y1="437.000" x2="171.692" y2="578.000" />
+        <line x1="414.113" y1="432.659" x2="141.722" y2="505.646" />
+        <line x1="413.500" y1="428.000" x2="131.500" y2="428.000" />
+        <line x1="414.113" y1="423.341" x2="141.722" y2="350.354" />
+        <line x1="415.912" y1="419.000" x2="171.692" y2="278.000" />
+        <line x1="418.772" y1="415.272" x2="219.368" y2="215.868" />
+        <line x1="422.500" y1="412.412" x2="281.500" y2="168.192" />
+        <line x1="426.841" y1="410.613" x2="353.854" y2="138.222" />
+      </g>
+    </g>
+
+    <!-- ==================== ANILLO DORADO DE SOMBRA ==================== -->
+    <g id="anillo-sombra" filter="url(#shadow-ring)">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M432.913 116.88C465.276 116.947 497.567 121.994 528.354 131.928C654.764 171.021 747.577 297.607 745.777 430.38C750.076 597.855 599.025 749.17 431.372 745.085C263.72 749.17 112.669 597.855 116.968 430.38C115.167 297.607 207.98 171.021 334.391 131.928C365.178 121.994 397.469 116.947 429.831 116.88L432.913 116.88ZM426.23 129.535C263.661 129.535 131.873 261.323 131.873 423.891L131.873 434.178C131.873 596.747 263.661 728.535 426.23 728.535L436.518 728.535C599.086 728.535 730.873 596.747 730.873 434.179L730.873 423.891C730.873 261.323 599.086 129.535 436.518 129.535L426.23 129.535Z" fill="url(#grad-ring-gold)"/>
+    </g>
+
+    <!-- ==================== ANILLO DE 24 COLORES (HORAS) ==================== -->
+    <g id="anillo-horas">
+      <!-- Capa exterior (colores saturados) -->
+      <g id="horas-exterior">
+        <path d="M431.517 427.898L181.733 534.804C172.384 512.599 166.004 489.354 162.677 465.681L431.517 427.898Z" fill="#C72225"/>
+        <path d="M431.517 427.898L162.677 465.681C159.349 442.007 159.076 417.904 161.941 393.983L431.517 427.898Z" fill="#D1422D"/>
+        <path d="M431.621 427.76L538.132 680.757C516.209 690.14 493.249 696.517 469.854 699.805L431.621 427.76Z" fill="#535EDD"/>
+        <path d="M431.621 427.759L469.854 699.805C446.46 703.093 422.631 703.291 398.971 700.314L431.621 427.759Z" fill="#6A52B9"/>
+        <path d="M431.62 427.759L398.97 700.314C375.212 697.325 352.044 691.187 330.038 682.137L431.62 427.759Z" fill="#7E4899"/>
+        <path d="M431.62 427.759L330.038 682.137C308.215 673.161 287.535 661.319 268.557 646.841L431.62 427.759Z" fill="#913E7C"/>
+        <path d="M431.595 428.011L162.02 394.096C164.931 369.795 171.03 346.116 180.077 323.657L431.595 428.011Z" fill="#DB6135"/>
+        <path d="M431.598 428.01L180.08 323.656C188.845 301.898 200.379 281.285 214.464 262.361L431.598 428.01Z" fill="#E5803D"/>
+        <path d="M431.517 427.898L681.301 320.992C672.243 299.475 660.552 279.301 646.571 260.912L431.517 427.898Z" fill="#89D63D"/>
+        <path d="M431.517 427.898L646.571 260.912C631.696 241.348 614.228 223.805 594.581 208.816L431.517 427.898Z" fill="#9ED641"/>
+        <path d="M431.517 427.898L325.005 174.901C303.361 184.165 283.104 196.196 264.696 210.632L431.517 427.898Z" fill="#F2A948"/>
+        <path d="M431.517 427.898L264.695 210.632C245.813 225.44 228.876 242.776 214.383 262.249L431.517 427.898Z" fill="#ED9B44"/>
+        <path d="M431.517 427.897L681.301 320.991C691.338 344.832 697.954 369.87 701.042 395.352L431.517 427.897Z" fill="#70D739"/>
+        <path d="M431.519 427.897L701.044 395.351C703.709 417.337 703.749 439.652 701.094 461.812L431.519 427.897Z" fill="#6BC059"/>
+        <path d="M431.519 427.897L325.007 174.9C346.93 165.517 369.89 159.139 393.285 155.852L431.519 427.897Z" fill="#F6B74C"/>
+        <path d="M431.519 427.897L464.169 155.343C440.509 152.366 416.68 152.564 393.285 155.852L431.519 427.897Z" fill="#FFD453"/>
+        <path d="M431.407 427.976L464.057 155.421C488.01 158.435 511.362 164.648 533.528 173.821L431.407 427.976Z" fill="#E5D54E"/>
+        <path d="M431.407 427.976L533.528 173.821C555.153 182.77 575.649 194.535 594.471 208.894L431.407 427.976Z" fill="#CBD549"/>
+        <path d="M431.439 427.785L701.014 461.699C698.136 485.721 692.144 509.134 683.268 531.363L431.439 427.785Z" fill="#66AB75"/>
+        <path d="M431.438 427.784L683.267 531.362C674.464 553.406 662.824 574.285 648.572 593.433L431.438 427.784Z" fill="#61988F"/>
+        <path d="M431.517 427.898L181.733 534.804C190.922 556.631 202.82 577.076 217.069 595.678L431.517 427.898Z" fill="#B42C44"/>
+        <path d="M431.519 427.897L217.071 595.677C231.814 614.922 249.074 632.193 268.455 646.979L431.519 427.897Z" fill="#A23660"/>
+        <path d="M431.519 427.897L538.03 680.894C559.856 671.553 580.271 659.397 598.803 644.799L431.519 427.897Z" fill="#5873C0"/>
+        <path d="M431.519 427.897L598.803 644.799C617.499 630.072 634.278 612.86 648.653 593.546L431.519 427.897Z" fill="#5C84A9"/>
+      </g>
+      
+      <!-- Capa interior (colores más vibrantes) -->
+      <g id="horas-interior">
+        <path d="M431.985 427.9L182.199 534.807C172.851 512.601 166.47 489.357 163.143 465.683L431.985 427.9Z" fill="#B12E4F"/>
+        <path d="M431.985 427.9L163.143 465.683C159.816 442.009 159.542 417.906 162.408 393.985L431.985 427.9Z" fill="#C72225"/>
+        <path d="M432.089 427.761L538.601 680.76C516.678 690.143 493.717 696.521 470.323 699.809L432.089 427.761Z" fill="#2F64C2"/>
+        <path d="M432.089 427.761L470.323 699.809C446.928 703.097 423.099 703.295 399.438 700.318L432.089 427.761Z" fill="#474BD0"/>
+        <path d="M432.088 427.761L399.438 700.318C375.679 697.329 352.511 691.192 330.506 682.141L432.088 427.761Z" fill="#5B49C1"/>
+        <path d="M432.088 427.761L330.506 682.141C308.682 673.165 288.002 661.323 269.024 646.845L432.088 427.761Z" fill="#7047B2"/>
+        <path d="M432.064 428.013L162.487 394.098C165.398 369.797 171.496 346.117 180.544 323.658L432.064 428.013Z" fill="#D2392B"/>
+        <path d="M432.064 428.013L180.544 323.658C189.31 301.9 200.843 281.287 214.928 262.363L432.064 428.013Z" fill="#DB4F31"/>
+        <path d="M431.985 427.9L681.771 320.993C672.713 299.475 661.022 279.301 647.041 260.913L431.985 427.9Z" fill="#B3D04A"/>
+        <path d="M431.985 427.9L647.041 260.913C632.166 241.348 614.698 223.805 595.05 208.816L431.985 427.9Z" fill="#FFD864"/>
+        <path d="M431.985 427.9L325.473 174.901C303.828 184.165 283.571 196.197 265.163 210.632L431.985 427.9Z" fill="#EE9365"/>
+        <path d="M431.985 427.9L265.163 210.632C246.281 225.44 229.344 242.777 214.85 262.25L431.985 427.9Z" fill="#E56537"/>
+        <path d="M431.985 427.9L681.771 320.993C691.808 344.833 698.424 369.872 701.513 395.354L431.985 427.9Z" fill="#89CC47"/>
+        <path d="M431.985 427.9L701.513 395.354C704.178 417.339 704.217 439.655 701.562 461.815L431.985 427.9Z" fill="#5BC744"/>
+        <path d="M431.985 427.9L325.473 174.901C347.396 165.518 370.356 159.14 393.751 155.852L431.985 427.9Z" fill="#F6C294"/>
+        <path d="M431.985 427.899L464.636 155.343C440.975 152.366 417.146 152.564 393.751 155.852L431.985 427.899Z" fill="#FFF0C2"/>
+        <path d="M431.874 427.979L464.524 155.422C488.477 158.435 511.829 164.649 533.996 173.821L431.874 427.979Z" fill="#FAE29A"/>
+        <path d="M431.873 427.979L533.996 173.822C555.62 182.77 576.116 194.536 594.938 208.895L431.873 427.979Z" fill="#FDDD7C"/>
+        <path d="M431.907 427.786L701.484 461.702C698.606 485.723 692.614 509.137 683.738 531.365L431.907 427.786Z" fill="#3EB764"/>
+        <path d="M431.907 427.786L683.738 531.365C674.935 553.409 663.295 574.288 649.042 593.436L431.907 427.786Z" fill="#20A685"/>
+        <path d="M431.985 427.9L182.199 534.807C191.389 556.634 203.287 577.08 217.536 595.681L431.985 427.9Z" fill="#993A7C"/>
+        <path d="M431.985 427.9L217.536 595.681C232.279 614.926 249.539 632.197 268.92 646.983L431.985 427.9Z" fill="#8445A4"/>
+        <path d="M431.985 427.9L538.498 680.899C560.324 671.557 580.739 659.401 599.27 644.803L431.985 427.9Z" fill="#1A7AB6"/>
+        <path d="M431.985 427.9L599.27 644.803C617.967 630.076 634.745 612.864 649.121 593.55L431.985 427.9Z" fill="#0194A7"/>
+      </g>
+    </g>
+
+    <!-- ==================== DISCO CENTRAL NEGRO ==================== -->
+    <g id="disco-central">
+      <g filter="url(#inner-shadow-disc)">
+        <path d="M433.864 664.139C305.282 664.139 201.045 559.903 201.045 431.321C201.045 302.739 305.282 198.502 433.864 198.502C562.446 198.502 666.682 302.739 666.682 431.321C666.682 559.903 562.446 664.139 433.864 664.139Z" fill="url(#grad-central-disc)"/>
+      </g>
+      <path d="M201.641 431.32C201.641 303.068 305.611 199.098 433.864 199.098C562.117 199.098 666.086 303.068 666.086 431.32C666.086 559.573 562.117 663.543 433.864 663.543C305.611 663.543 201.641 559.573 201.641 431.32Z" stroke="url(#grad-central-stroke)" stroke-width="1.19172"/>
+    </g>
+
+    <!-- ==================== YIN-YANG ==================== -->
+    <g id="yin-yang">
+      <!-- Parte clara (Yang) -->
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M575.123 428.704C575.123 349.244 510.708 284.828 431.247 284.828C391.517 284.828 359.309 317.036 359.309 356.766C359.309 396.497 391.517 428.704 431.247 428.704C470.977 428.704 503.185 460.912 503.185 500.643C503.185 540.373 470.977 572.581 431.247 572.581C510.708 572.581 575.123 508.165 575.123 428.704ZM400.416 500.643C400.416 483.615 414.22 469.812 431.247 469.812C448.274 469.812 462.078 483.615 462.078 500.643C462.078 517.67 448.274 531.473 431.247 531.473C414.22 531.473 400.416 517.67 400.416 500.643Z" fill="url(#grad-yin-light)"/>
+      
+      <!-- Punto oscuro en Yang -->
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M400.416 500.642C400.416 483.615 414.22 469.812 431.247 469.812C448.274 469.812 462.078 483.615 462.078 500.642C462.078 517.67 448.274 531.473 431.247 531.473C414.22 531.473 400.416 517.67 400.416 500.642Z" fill="#363E46"/>
+      
+      <!-- Parte oscura (Yin) -->
+      <path d="M503.185 500.643C503.185 460.912 470.977 428.704 431.247 428.704C391.516 428.704 359.308 396.497 359.308 356.766C359.308 317.036 391.516 284.828 431.247 284.828C351.786 284.828 287.37 349.244 287.37 428.704C287.37 508.165 351.786 572.581 431.247 572.581C470.977 572.581 503.185 540.373 503.185 500.643ZM431.247 469.812C414.219 469.812 400.416 483.615 400.416 500.643C400.416 517.67 414.219 531.473 431.247 531.473C448.274 531.473 462.077 517.67 462.077 500.643C462.077 483.615 448.274 469.812 431.247 469.812Z" fill="url(#grad-yin-dark)"/>
+      
+      <!-- Indicador triangular (hora actual) -->
+      <g id="indicador" filter="url(#inner-shadow-indicator)">
+        <path d="M456.861 343.541C471.07 369.881 442.072 398.608 415.626 384.39C400.921 376.483 395.493 358.198 403.503 343.549L427.3 300.024C428.615 297.617 432.088 297.617 433.386 300.023L456.861 343.541Z" fill="url(#grad-indicator)"/>
+      </g>
+      <path d="M415.912 383.867C441.836 397.805 470.263 369.644 456.334 343.823L432.859 300.305C431.785 298.315 428.913 298.315 427.825 300.305L404.027 343.831C396.176 358.191 401.497 376.116 415.912 383.867Z" stroke="url(#grad-indicator-stroke)" stroke-width="1.19172"/>
+    </g>
+
+    <!-- ==================== FASE LUNAR ==================== -->
+    <g id="fase-lunar">
+      <!-- Contenedor circular -->
+      <g filter="url(#inner-shadow-moon-container)">
+        <rect x="406.871" y="526.495" width="57.5506" height="57.5506" rx="28.7753" transform="rotate(-90 406.871 526.495)" fill="url(#grad-moon-container)"/>
+      </g>
+      <rect x="407.467" y="525.899" width="56.3589" height="56.3589" rx="28.1794" transform="rotate(-90 407.467 525.899)" stroke="url(#grad-moon-container-stroke)" stroke-width="1.19172"/>
+      
+      <!-- Luna (Cuarto Creciente - fase actual) -->
+      <g id="luna-cuarto-creciente" filter="url(#inner-shadow-moon)">
+        <path d="M434.604 468.954C432.382 469.011 430.223 469.318 428.154 469.851C428.102 469.864 428.05 469.879 427.998 469.893C440.33 473.141 449.424 484.368 449.424 497.72C449.424 511.072 440.33 522.298 427.998 525.546C428.738 525.741 429.49 525.909 430.252 526.045C430.725 526.13 431.201 526.203 431.682 526.264C432.642 526.386 433.616 526.46 434.604 526.486C434.85 526.492 435.098 526.495 435.346 526.495C435.594 526.495 435.842 526.492 436.089 526.486C438.063 526.435 439.988 526.186 441.845 525.758C442.309 525.651 442.769 525.533 443.224 525.403C455.286 521.978 464.121 510.88 464.121 497.72C464.121 482.076 451.638 469.348 436.089 468.954C435.842 468.948 435.594 468.944 435.346 468.944L434.604 468.954Z" fill="url(#grad-moon)"/>
+      </g>
+    </g>
+
+    </g>
+</svg>
