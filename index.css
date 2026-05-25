@@ -262,6 +262,18 @@ body {
   justify-items: center;
 }
 
+.geo-dial-svg-container {
+  width: min(var(--geo-dial-size, 420px), 100%);
+  height: auto;
+}
+
+.geo-dial-svg-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
 .geo-dial {
   width: min(var(--geo-dial-size, 420px), 100%);
   height: auto;
