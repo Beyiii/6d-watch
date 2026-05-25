@@ -1,14 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&display=swap');
 
 :root {
-  --dynamic-bg-start: #1a2438;
-  --dynamic-bg-mid: #243550;
-  --dynamic-bg-end: #112030;
+  --dynamic-bg-start: #0a1628;
+  --dynamic-bg-mid: #0f2038;
+  --dynamic-bg-end: #081420;
+  --color-orange: #f39c12;
+  --color-orange-dark: #d4860a;
+  --color-blue: #5ba3d0;
+  --color-blue-bright: #4a90e2;
+  --color-text-primary: #e0e0e0;
+  --color-text-white: #ffffff;
+  --color-border: #1e3a4a;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 17px;
   background-image: linear-gradient(
     160deg,
@@ -18,7 +25,7 @@ body {
   );
   background-attachment: fixed;
   transition: background-image 0.9s linear;
-  color: #e2e8f0;
+  color: var(--color-text-primary);
 }
 
 #container {
@@ -30,14 +37,14 @@ body {
 .hero {
   margin-bottom: 22px;
   padding: 18px 20px 14px;
-  border-radius: 18px;
+  border-radius: 12px;
   background:
-    linear-gradient(152deg, rgba(19, 39, 92, 0.72), rgba(65, 26, 96, 0.58));
-  border: 1px solid rgba(156, 193, 255, 0.24);
+    linear-gradient(152deg, rgba(10, 22, 40, 0.8), rgba(15, 32, 56, 0.7));
+  border: 1px solid rgba(91, 163, 208, 0.2);
   box-shadow:
-    inset 0 1px 0 rgba(235, 243, 255, 0.13),
-    0 14px 34px rgba(8, 12, 30, 0.36);
-  backdrop-filter: blur(8px) saturate(138%);
+    inset 0 1px 0 rgba(224, 224, 224, 0.08),
+    0 14px 34px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px) saturate(120%);
 }
 
 .app-title {
@@ -46,7 +53,7 @@ body {
   font-size: clamp(2.35rem, 6vw, 5.1rem);
   line-height: 0.98;
   letter-spacing: -0.03em;
-  color: #f9fbff;
+  color: var(--color-text-white);
   text-shadow: none;
 }
 
@@ -57,7 +64,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(220, 228, 242, 0.78);
+  color: rgba(243, 156, 18, 0.9);
 }
 
 .app-description {
@@ -65,7 +72,7 @@ body {
   max-width: 760px;
   font-size: 0.98rem;
   line-height: 1.45;
-  color: rgba(233, 239, 248, 0.95);
+  color: rgba(224, 224, 224, 0.95);
 }
 
 .hero-divider {
@@ -75,23 +82,23 @@ body {
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    rgba(114, 188, 255, 0.52) 0%,
-    rgba(255, 255, 255, 0.3) 48%,
-    rgba(255, 148, 148, 0.45) 100%
+    rgba(91, 163, 208, 0.52) 0%,
+    rgba(224, 224, 224, 0.3) 48%,
+    rgba(243, 156, 18, 0.45) 100%
   );
 }
 
 .card {
   background:
-    linear-gradient(145deg, rgba(20, 43, 102, 0.63), rgba(65, 27, 102, 0.5));
-  border: 1px solid rgba(162, 196, 255, 0.2);
-  border-radius: 18px;
+    linear-gradient(145deg, rgba(10, 22, 40, 0.6), rgba(15, 32, 56, 0.5));
+  border: 1px solid rgba(91, 163, 208, 0.18);
+  border-radius: 10px;
   padding: 18px;
   margin-bottom: 0;
   box-shadow:
-    inset 0 1px 0 rgba(237, 244, 255, 0.13),
-    0 16px 38px rgba(7, 11, 28, 0.4);
-  backdrop-filter: blur(10px) saturate(142%);
+    inset 0 1px 0 rgba(224, 224, 224, 0.08),
+    0 16px 38px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px) saturate(120%);
 }
 
 .card h3 {
@@ -100,7 +107,7 @@ body {
   font-size: clamp(1.28rem, 2.1vw, 1.55rem);
   letter-spacing: 0.015em;
   line-height: 1.1;
-  color: #e8edf8;
+  color: var(--color-orange);
 }
 
 .card h3 .bi {
@@ -116,9 +123,9 @@ body {
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    rgba(118, 191, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.28) 46%,
-    rgba(175, 136, 255, 0.44) 100%
+    rgba(91, 163, 208, 0.55) 0%,
+    rgba(224, 224, 224, 0.28) 46%,
+    rgba(243, 156, 18, 0.44) 100%
   );
 }
 
@@ -177,10 +184,10 @@ body {
   display: grid;
   gap: 4px;
   padding: 12px 13px;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  border-radius: 12px;
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.34), rgba(42, 20, 68, 0.28));
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.07);
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  border-radius: 10px;
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.4), rgba(15, 32, 56, 0.3));
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.05);
 }
 
 .primary-label {
@@ -189,8 +196,8 @@ body {
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(220, 228, 242, 0.82);
-  opacity: 0.72;
+  color: rgba(243, 156, 18, 0.85);
+  opacity: 0.9;
 }
 
 .primary-field:first-child .primary-label {
@@ -219,17 +226,17 @@ body {
   font-size: 1.6rem;
   line-height: 1.14;
   font-weight: 700;
-  color: #e8edf8;
+  color: #ffffff;
 }
 
 .primary-time-block {
   display: grid;
   gap: 7px;
   padding: 13px;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  border-radius: 12px;
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.38), rgba(44, 20, 70, 0.32));
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.07);
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  border-radius: 10px;
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.45), rgba(15, 32, 56, 0.35));
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.05);
 }
 
 .primary-time {
@@ -237,7 +244,7 @@ body {
   line-height: 0.96;
   letter-spacing: -0.02em;
   font-weight: 700;
-  color: #ecf1fb;
+  color: #ffffff;
   font-variant-numeric: tabular-nums;
 }
 
@@ -245,11 +252,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  border-radius: 14px;
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  border-radius: 10px;
   padding: 14px;
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.4), rgba(42, 20, 68, 0.34));
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.08);
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.45), rgba(15, 32, 56, 0.35));
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.06);
 }
 
 #geo-clock-wrap.is-clickable {
@@ -273,7 +280,7 @@ body {
   font-family: 'Sora', sans-serif;
   font-weight: 800;
   letter-spacing: 0.02em;
-  color: rgba(242, 248, 255, 0.92);
+  color: rgba(243, 156, 18, 0.95);
   font-variant-numeric: tabular-nums;
 }
 
@@ -292,9 +299,9 @@ body {
   width: min(92vw, 640px);
   max-height: 92vh;
   overflow: auto;
-  border-radius: 16px;
-  background: rgba(18, 18, 18, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(8, 14, 24, 0.95);
+  border: 1px solid rgba(91, 163, 208, 0.18);
   padding: 18px;
 }
 
@@ -304,9 +311,9 @@ body {
   right: 10px;
   width: 36px;
   height: 36px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  border: 1px solid rgba(91, 163, 208, 0.2);
+  background: rgba(0, 0, 0, 0.4);
   color: inherit;
   display: grid;
   place-items: center;
@@ -314,17 +321,18 @@ body {
 
 .modal-close:hover {
   background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(243, 156, 18, 0.3);
 }
 .geo-civil-number {
   font-family: 'Sora', sans-serif;
   font-size: 12px;
   font-weight: 800;
-  fill: rgba(242, 248, 255, 0.65);
+  fill: rgba(224, 224, 224, 0.65);
   opacity: 0.9;
 }
 
 .geo-civil-number.is-active {
-  fill: rgba(242, 248, 255, 0.98);
+  fill: rgba(243, 156, 18, 0.98);
   opacity: 1;
 }
 
@@ -343,7 +351,7 @@ body {
   font-family: 'Sora', sans-serif;
   font-size: 14px;
   font-weight: 800;
-  fill: rgba(242, 248, 255, 0.92);
+  fill: rgba(243, 156, 18, 0.95);
   font-variant-numeric: tabular-nums;
 }
 
@@ -359,7 +367,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(220, 228, 242, 0.82);
+  color: rgba(243, 156, 18, 0.85);
   text-align: center;
 }
 
@@ -372,9 +380,9 @@ body {
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    rgba(118, 191, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.26) 50%,
-    rgba(175, 136, 255, 0.42) 100%
+    rgba(91, 163, 208, 0.5) 0%,
+    rgba(224, 224, 224, 0.26) 50%,
+    rgba(243, 156, 18, 0.42) 100%
   );
 }
 
@@ -450,16 +458,16 @@ body {
 .calendar-nav {
   width: 42px;
   height: 42px;
-  border-radius: 12px;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.32), rgba(42, 20, 68, 0.26));
-  color: rgba(233, 239, 248, 0.92);
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.07);
+  border-radius: 10px;
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.35), rgba(15, 32, 56, 0.28));
+  color: rgba(224, 224, 224, 0.92);
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.05);
   cursor: pointer;
 }
 
 .calendar-nav:hover {
-  border-color: rgba(173, 205, 255, 0.28);
+  border-color: rgba(91, 163, 208, 0.28);
 }
 
 .calendar-month {
@@ -468,7 +476,7 @@ body {
   font-weight: 800;
   letter-spacing: -0.01em;
   font-size: 1.25rem;
-  color: #eef3ff;
+  color: #ffffff;
 }
 
 .calendar-month-button {
@@ -489,10 +497,10 @@ body {
   grid-template-columns: 1fr minmax(180px, 0.42fr);
   gap: 12px;
   padding: 12px;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  border-radius: 14px;
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.3), rgba(42, 20, 68, 0.24));
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.06);
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  border-radius: 10px;
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.35), rgba(15, 32, 56, 0.28));
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.04);
 }
 
 .calendar-picker-section {
@@ -506,7 +514,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(220, 228, 242, 0.78);
+  color: rgba(243, 156, 18, 0.85);
 }
 
 .calendar-picker-months {
@@ -524,24 +532,24 @@ body {
 }
 
 .calendar-picker-button {
-  border: 1px solid rgba(173, 205, 255, 0.16);
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.24), rgba(42, 20, 68, 0.18));
-  color: rgba(242, 248, 255, 0.95);
-  border-radius: 12px;
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.28), rgba(15, 32, 56, 0.2));
+  color: rgba(224, 224, 224, 0.95);
+  border-radius: 10px;
   padding: 10px 10px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.04);
   font-variant-numeric: tabular-nums;
 }
 
 .calendar-picker-button:hover {
-  border-color: rgba(173, 205, 255, 0.28);
+  border-color: rgba(91, 163, 208, 0.28);
 }
 
 .calendar-picker-button.is-active {
-  border-color: rgba(118, 191, 255, 0.58);
-  background: linear-gradient(140deg, rgba(118, 191, 255, 0.22), rgba(175, 136, 255, 0.18));
+  border-color: rgba(243, 156, 18, 0.58);
+  background: linear-gradient(140deg, rgba(243, 156, 18, 0.18), rgba(212, 134, 10, 0.14));
 }
 
 .calendar-search {
@@ -551,10 +559,10 @@ body {
   gap: 10px;
   align-items: center;
   padding: 10px 12px;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  border-radius: 12px;
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.28), rgba(42, 20, 68, 0.22));
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.06);
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  border-radius: 10px;
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.32), rgba(15, 32, 56, 0.25));
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.04);
   box-sizing: border-box;
   width: 100%;
   overflow: hidden;
@@ -566,16 +574,16 @@ body {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(220, 228, 242, 0.78);
+  color: rgba(243, 156, 18, 0.85);
 }
 
 .calendar-date-input {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(6, 10, 22, 0.22);
-  color: rgba(242, 248, 255, 0.96);
+  border-radius: 10px;
+  border: 1px solid rgba(91, 163, 208, 0.2);
+  background: rgba(5, 10, 20, 0.3);
+  color: rgba(224, 224, 224, 0.96);
   font-size: 1rem;
   box-sizing: border-box;
   min-width: 0;
@@ -584,7 +592,7 @@ body {
 
 .calendar-date-input:focus {
   outline: none;
-  border-color: rgba(118, 191, 255, 0.52);
+  border-color: rgba(243, 156, 18, 0.52);
 }
 
 .calendar-weekdays {
@@ -600,7 +608,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(220, 228, 242, 0.62);
+  color: rgba(243, 156, 18, 0.72);
 }
 
 .calendar-grid {
@@ -620,22 +628,22 @@ body {
 }
 
 .calendar-day {
-  border: 1px solid rgba(173, 205, 255, 0.16);
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.26), rgba(42, 20, 68, 0.2));
-  color: rgba(242, 248, 255, 0.95);
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.28), rgba(15, 32, 56, 0.2));
+  color: rgba(224, 224, 224, 0.95);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.04);
   cursor: pointer;
 }
 
 .calendar-day:hover {
-  border-color: rgba(173, 205, 255, 0.28);
+  border-color: rgba(91, 163, 208, 0.28);
 }
 
 .calendar-day.is-selected {
-  border-color: rgba(118, 191, 255, 0.58);
-  background: linear-gradient(140deg, rgba(118, 191, 255, 0.22), rgba(175, 136, 255, 0.18));
+  border-color: rgba(243, 156, 18, 0.58);
+  background: linear-gradient(140deg, rgba(243, 156, 18, 0.18), rgba(212, 134, 10, 0.14));
 }
 
 .calendar-day.is-today {
@@ -660,7 +668,7 @@ body {
 .calendar-info-date {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #eef3ff;
+  color: #ffffff;
 }
 
 .calendar-season {
@@ -668,25 +676,25 @@ body {
   align-items: center;
   gap: 8px;
   padding: 9px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.28), rgba(42, 20, 68, 0.22));
-  color: rgba(242, 248, 255, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.32), rgba(15, 32, 56, 0.25));
+  color: rgba(224, 224, 224, 0.9);
   font-weight: 700;
 }
 
 .calendar-info-tz {
   margin: 0;
-  color: rgba(226, 232, 240, 0.78);
+  color: rgba(224, 224, 224, 0.78);
   font-size: 0.98rem;
 }
 
 .calendar-info-section {
   padding: 12px 13px;
-  border: 1px solid rgba(173, 205, 255, 0.18);
-  border-radius: 12px;
-  background: linear-gradient(140deg, rgba(18, 32, 68, 0.28), rgba(42, 20, 68, 0.22));
-  box-shadow: inset 0 1px 0 rgba(244, 248, 255, 0.06);
+  border: 1px solid rgba(91, 163, 208, 0.16);
+  border-radius: 10px;
+  background: linear-gradient(140deg, rgba(10, 22, 40, 0.32), rgba(15, 32, 56, 0.25));
+  box-shadow: inset 0 1px 0 rgba(224, 224, 224, 0.04);
 }
 
 .calendar-info-section-title {
@@ -695,7 +703,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(220, 228, 242, 0.78);
+  color: rgba(243, 156, 18, 0.85);
   margin-bottom: 10px;
 }
 
@@ -720,11 +728,11 @@ body {
   width: 100%;
   height: 100%;
   min-height: 320px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  border: 1px solid rgba(91, 163, 208, 0.2);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    0 10px 22px rgba(3, 8, 18, 0.32);
+    inset 0 1px 0 rgba(224, 224, 224, 0.06),
+    0 10px 22px rgba(0, 0, 0, 0.4);
   overflow: hidden;
 }
 
@@ -740,21 +748,21 @@ body {
 
 .solar-track-day {
   fill: none;
-  stroke: rgba(255, 204, 112, 0.35);
+  stroke: rgba(243, 156, 18, 0.35);
   stroke-width: 4;
   stroke-linecap: round;
 }
 
 .solar-track-day-progress {
   fill: none;
-  stroke: rgba(255, 208, 127, 0.95);
+  stroke: rgba(243, 156, 18, 0.95);
   stroke-width: 5;
   stroke-linecap: round;
 }
 
 .solar-track-night {
   fill: none;
-  stroke: rgba(166, 189, 222, 0.45);
+  stroke: rgba(91, 163, 208, 0.45);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-dasharray: 5 7;
@@ -762,42 +770,42 @@ body {
 
 .solar-track-night-progress {
   fill: none;
-  stroke: rgba(175, 204, 255, 0.88);
+  stroke: rgba(91, 163, 208, 0.88);
   stroke-width: 4;
   stroke-linecap: round;
 }
 
 .solar-anchor {
-  stroke: rgba(255, 255, 255, 0.35);
+  stroke: rgba(224, 224, 224, 0.35);
   stroke-width: 2;
 }
 
 .sun-marker {
-  fill: #ffd166;
-  stroke: #ff9f1c;
+  fill: #f39c12;
+  stroke: #d4860a;
   stroke-width: 2.5;
-  filter: drop-shadow(0 0 10px rgba(255, 193, 90, 0.65));
+  filter: drop-shadow(0 0 10px rgba(243, 156, 18, 0.65));
 }
 
 .sun-marker.under-horizon {
-  fill: #d8dee7;
-  stroke: #9da7b5;
-  filter: drop-shadow(0 0 8px rgba(171, 181, 196, 0.4));
+  fill: #5ba3d0;
+  stroke: #4a90e2;
+  filter: drop-shadow(0 0 8px rgba(91, 163, 208, 0.4));
 }
 
 .solar-legend {
-  fill: rgba(226, 232, 240, 0.85);
+  fill: rgba(224, 224, 224, 0.85);
   font-size: 9px;
   font-weight: 600;
 }
 
 .solar-marker-pct {
-  fill: rgba(242, 248, 255, 0.95);
+  fill: rgba(255, 255, 255, 0.95);
   font-size: 8px;
   font-weight: 700;
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgba(20, 30, 46, 0.65);
+  stroke: rgba(8, 14, 24, 0.65);
   stroke-width: 2px;
   stroke-linejoin: round;
 }
@@ -817,16 +825,16 @@ body {
 
 .solar-phase {
   font-weight: 700;
-  color: #f2e8d1;
+  color: #f39c12;
 }
 
 .solar-remaining {
-  color: rgba(226, 232, 240, 0.88);
+  color: rgba(224, 224, 224, 0.88);
 }
 
 .solar-arc-fallback {
   margin: 0;
-  color: rgba(226, 232, 240, 0.86);
+  color: rgba(224, 224, 224, 0.86);
 }
 
 @media (max-width: 700px) {
