@@ -1,0 +1,71 @@
+.leaflet-solar-night,
+.leaflet-solar-twilight,
+.leaflet-solar-twilight-warm,
+.leaflet-solar-glow-outer,
+.leaflet-solar-glow-mid,
+.leaflet-solar-glow-core {
+  pointer-events: none;
+}
+
+/* =========================
+   NIGHT SHADOW
+========================= */
+
+.leaflet-solar-night {
+  fill: rgba(12, 28, 74, 0.34);
+  stroke: none;
+  mix-blend-mode: multiply;
+}
+
+/* =========================
+   BLUE ATMOSPHERIC TWILIGHT
+========================= */
+
+.leaflet-solar-twilight {
+  fill: rgba(90, 140, 255, 0.10);
+  stroke: none;
+
+  filter: blur(48px);
+
+  opacity: 0.95;
+
+  mix-blend-mode: screen;
+}
+
+/* =========================
+   GOLDEN SUNSET LAYER
+========================= */
+
+.leaflet-solar-twilight-warm {
+  fill: rgba(255, 182, 92, 0.08);
+  stroke: none;
+
+  filter: blur(70px);
+
+  opacity: 0.85;
+
+  mix-blend-mode: screen;
+}
+
+/* =========================
+  BLUE TERMINATOR GLOW
+  (vector multi-stroke to avoid filter rasterization)
+========================= */
+
+.leaflet-solar-glow-outer,
+.leaflet-solar-glow-mid,
+.leaflet-solar-glow-core {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  mix-blend-mode: screen;
+  shape-rendering: geometricPrecision;
+}
+
+/* =========================
+   OPTIONAL EXTRA SMOOTHNESS
+========================= */
+
+.leaflet-overlay-pane svg {
+  shape-rendering: geometricPrecision;
+}
