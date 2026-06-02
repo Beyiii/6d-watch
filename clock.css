@@ -4,26 +4,26 @@
 /* ─── Variables ─────────────────────────────────────────────────────────────── */
 :root {
   /* Reloj civil */
-  --civil-border:       #5ba3d0;
-  --civil-face:         #0a1628;       /* azul marino oscuro */
-  --civil-shadow-out:   rgba(0,0,0,0.5);
-  --civil-shadow-in:    rgba(0,0,0,0.3);
-  --civil-num-major:    #f39c12;       /* naranja dorado */
-  --civil-num-minor:    #e0e0e0;       /* gris claro */
-  --civil-hand:         #f39c12;
-  --civil-second:       #5ba3d0;
-  --civil-center:       #f39c12;
+  --civil-border:       #c8c8c8;
+  --civil-face:         #f5f0e8;       /* antiquewhite suavizado */
+  --civil-shadow-out:   rgba(0,0,0,0.35);
+  --civil-shadow-in:    rgba(0,0,0,0.18);
+  --civil-num-major:    #4a4a4a;       /* 12, 3, 6, 9 → gris oscuro */
+  --civil-num-minor:    #9a9a9a;       /* resto → gris medio */
+  --civil-hand:         #333;
+  --civil-second:       #c0392b;
+  --civil-center:       #222;
 
   /* Reloj geométrico */
-  --geo-border:         #1e3a4a;
-  --geo-face:           #081420;       /* azul oscuro */
+  --geo-border:         #2a2a2a;
+  --geo-face:           #1a1a1a;       /* gris muy oscuro */
   --geo-shadow-out:     rgba(0,0,0,0.6);
   --geo-shadow-in:      rgba(0,0,0,0.5);
-  --geo-num-major:      #f39c12;       /* naranja dorado */
-  --geo-num-minor:      #5ba3d0;       /* azul */
-  --geo-hand:           #f39c12;       /* naranja para manecillas */
-  --geo-second:         #5ba3d0;       /* azul para segundero */
-  --geo-center:         #f39c12;
+  --geo-num-major:      #e8dcc8;       /* cremita */
+  --geo-num-minor:      #6a6a6a;       /* gris medio */
+  --geo-hand:           #d4c9b0;       /* cremita para manecillas */
+  --geo-second:         #8a8a8a;       /* gris para segundero */
+  --geo-center:         #c8bc9e;
 }
 
 /* ─── Contenedor de ambos relojes ───────────────────────────────────────────── */
@@ -44,12 +44,12 @@
 }
 
 .clock-label {
-  font-family: 'Sora', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-weight: 800;
   font-size: 13px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(224, 224, 224, 0.7);
+  color: #888;
 }
 
 /* ─── El reloj (forma base) ─────────────────────────────────────────────────── */
@@ -205,14 +205,14 @@
 
 /* ─── Display digital debajo de los relojes ─────────────────────────────────── */
 .clock-time-display {
-  font-family: 'Sora', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-weight: 800;
   font-size: 22px;
   letter-spacing: 0.05em;
-  color: #5ba3d0;
+  color: #555;
   text-align: center;
 }
 
 .clock-time-display.geometric {
-  color: #f39c12;
+  color: #c8bc9e;
 }
