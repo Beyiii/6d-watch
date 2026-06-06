@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "browse": {
+      "enabled": true
+    },
+    "figma": {
+      "enabled": true
+    }
+  }
+}

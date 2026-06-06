@@ -10,6 +10,7 @@ import Map from './components/Map.jsx'
 import SolarArc from './components/SolarArc.jsx'
 import Calendar from './components/Calendar.jsx'
 import CalendarInfo from './components/CalendarInfo.jsx'
+import ExperimentalFigmaClock from './components/ExperimentalFigmaClock.jsx'
 
 import { getCalendarDay } from './calendar.js'
 
@@ -267,6 +268,13 @@ export default function App() {
             <i className="bi bi-info-circle"></i> Información del día
           </h3>
           <CalendarInfo dayData={calendarDayData} timezoneLabel={timezoneLabel} />
+        </section>
+
+        <section id="experimental-clock-card" className="card">
+          <h3>
+            <i className="bi bi-bezier2"></i> Experimental
+          </h3>
+          <ExperimentalFigmaClock snapshot={snapshot} hemisphere={location.lat < 0 ? 'south' : 'north'} />
         </section>
       </div>
 

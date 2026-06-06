@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap');
 
 :root {
   --dynamic-bg-start: #1a2438;
@@ -156,7 +157,8 @@ body {
     'solar arc'
     'lunar arc'
     'special special'
-    'calendar calinfo';
+    'calendar calinfo'
+    'experimental experimental';
   gap: 16px;
 }
 
@@ -433,6 +435,39 @@ body {
 #calendar-info-card {
   grid-area: calinfo;
   margin-top: 14px;
+}
+
+#experimental-clock-card {
+  grid-area: experimental;
+  margin-top: 14px;
+}
+
+.experimental-figma-clock {
+  width: min(640px, 100%);
+  margin: 0 auto;
+}
+
+.experimental-figma-clock[data-ready="0"] {
+  visibility: hidden;
+}
+
+.experimental-figma-clock svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.experimental-figma-clock #dial-rotor {
+  shape-rendering: geometricPrecision;
+}
+
+.experimental-figma-clock [data-role='geo-minutes-text'] {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  paint-order: stroke fill;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 1;
 }
 
 .calendar {
