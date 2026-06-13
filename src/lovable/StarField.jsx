@@ -90,25 +90,30 @@ export function StarField({ count = 240 }) {
       </svg>
 
       {/* Stars */}
-      <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-        {stars.map((s, i) => (
-          <circle
-            key={i}
-            cx={s.cx}
-            cy={s.cy}
-            r={s.r * 0.07}
-            fill={s.tint}
-            opacity={s.opacity}
-            className="animate-twinkle"
-            style={{
-              '--tw-dur': `${s.dur}s`,
-              '--tw-min': s.min,
-              '--tw-max': s.max,
-              animationDelay: `${s.delay}s`,
-            }}
-          />
-        ))}
-      </svg>
+      <div className="absolute inset-0">
+        {stars.map((s, i) => {
+          const sizePx = s.r * 2
+          return (
+            <div
+              key={i}
+              className="absolute rounded-full animate-twinkle"
+              style={{
+                left: `${s.cx}%`,
+                top: `${s.cy}%`,
+                width: `${sizePx}px`,
+                height: `${sizePx}px`,
+                backgroundColor: s.tint,
+                opacity: s.opacity,
+                transform: 'translate(-50%, -50%)',
+                '--tw-dur': `${s.dur}s`,
+                '--tw-min': s.min,
+                '--tw-max': s.max,
+                animationDelay: `${s.delay}s`,
+              }}
+            />
+          )
+        })}
+      </div>
 
       {/* Vignette */}
       <div
