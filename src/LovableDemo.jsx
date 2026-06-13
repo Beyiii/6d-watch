@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { StarField } from './lovable/StarField.jsx'
 import { GlassCard, CardLabel } from './lovable/GlassCard.jsx'
 import { SolarDial } from './lovable/SolarDial.jsx'
@@ -8,10 +8,10 @@ import { SeasonCard } from './lovable/SeasonCard.jsx'
 import { CelestialPreviewCard } from './lovable/CelestialPreview.jsx'
 import {
   ChevronDownIcon,
+  GlobeIcon,
   LocationIcon,
   LogoIcon,
   MoonPhaseIcon,
-  SearchIcon,
   SettingsIcon,
   SunIcon,
   SunriseIcon,
@@ -126,14 +126,72 @@ function Header({ onOpenSidebar }) {
       </button>
 
       <div className="flex items-center gap-2">
-        <IconButton aria-label="Buscar">
-          <SearchIcon className="h-4 w-4" />
-        </IconButton>
+        <LanguageMenu />
         <IconButton aria-label="Ajustes">
           <SettingsIcon className="h-4 w-4" />
         </IconButton>
       </div>
     </header>
+  )
+}
+
+function LanguageMenu() {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onPointerDown(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  const languages = [
+    { code: 'es', label: 'Español' },
+    { code: 'en', label: 'English' },
+  ]
+
+  return (
+    <div className="relative" ref={ref}>
+      <IconButton
+        aria-label="Seleccionar idioma"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <GlobeIcon className="h-4 w-4" />
+      </IconButton>
+
+      {open && (
+        <div
+          role="menu"
+          className="glass absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-2xl p-1.5 text-card-foreground"
+        >
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              type="button"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors hover:bg-white/10"
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
