@@ -137,7 +137,20 @@ function Header({ onOpenSidebar }) {
 
 function LanguageMenu() {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [visible, setVisible] = useState(false)
   const ref = useRef(null)
+
+  // Keep the menu mounted while it animates in and out.
+  useEffect(() => {
+    if (open) {
+      setMounted(true)
+      // Next frame: flip to the visible state to trigger the enter transition.
+      const id = requestAnimationFrame(() => setVisible(true))
+      return () => cancelAnimationFrame(id)
+    }
+    setVisible(false)
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -173,10 +186,18 @@ function LanguageMenu() {
         <GlobeIcon className="h-4 w-4" />
       </IconButton>
 
-      {open && (
+      {mounted && (
         <div
           role="menu"
-          className="glass absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-2xl p-1.5 text-card-foreground"
+          onTransitionEnd={() => {
+            // Unmount only after the closing transition finishes.
+            if (!visible) setMounted(false)
+          }}
+          className={[
+            'glass absolute right-0 z-50 mt-2 w-40 origin-top-right overflow-hidden rounded-2xl p-1.5 text-card-foreground',
+            'transition-[opacity,transform] duration-150 ease-out',
+            visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-1 scale-95',
+          ].join(' ')}
         >
           {languages.map((lang) => (
             <button
