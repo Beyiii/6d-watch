@@ -280,7 +280,7 @@ function LocationManager() {
   }, [open, showSearch])
 
   return (
-    <div className="absolute right-4 top-4 z-30" ref={ref}>
+    <div className="absolute left-4 top-4 z-30" ref={ref}>
       <button
         type="button"
         aria-label="Administrar ubicación"
@@ -301,7 +301,7 @@ function LocationManager() {
       {mounted && (
         <div
           className={[
-            'absolute right-0 top-full mt-2 flex items-start gap-2',
+            'absolute left-0 top-full mt-2 flex items-start gap-2',
             'transition-[opacity,transform] duration-150 ease-out',
             visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-1 scale-95',
           ].join(' ')}
@@ -309,15 +309,10 @@ function LocationManager() {
             if (!visible) setMounted(false)
           }}
         >
-          {/* Secondary panel: city search (slides in to the left of the main menu) */}
-          {showSearch && (
-            <LocationSearchPanel onClose={() => setShowSearch(false)} />
-          )}
-
           {/* Main panel: saved locations */}
           <div
             role="menu"
-            className="glass w-64 origin-top-right overflow-hidden rounded-2xl p-2 text-card-foreground"
+            className="glass w-64 origin-top-left overflow-hidden rounded-2xl p-2 text-card-foreground"
           >
             <p className="px-2 pb-1.5 pt-1 text-[0.7rem] uppercase tracking-wider text-muted-foreground">
               Ubicaciones guardadas
@@ -359,6 +354,11 @@ function LocationManager() {
               </button>
             </div>
           </div>
+
+          {/* Secondary panel: city search (slides in to the right of the main menu) */}
+          {showSearch && (
+            <LocationSearchPanel onClose={() => setShowSearch(false)} />
+          )}
         </div>
       )}
     </div>
@@ -376,9 +376,9 @@ function LocationSearchPanel({ onClose }) {
   return (
     <div
       className={[
-        'glass w-64 origin-top-right overflow-hidden rounded-2xl p-2 text-card-foreground',
+        'glass w-64 origin-top-left overflow-hidden rounded-2xl p-2 text-card-foreground',
         'transition-[opacity,transform] duration-150 ease-out',
-        shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2',
+        shown ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2',
       ].join(' ')}
     >
       <div className="flex items-center justify-between px-2 pb-1.5 pt-1">
