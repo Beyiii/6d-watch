@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tsconfigPaths(), tailwindcss()],
   base: './' // '/6d-watch/' 👈 nombre del repo es para GitHub Pages, './' es para android
 })
