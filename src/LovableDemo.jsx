@@ -77,7 +77,12 @@ export default function LovableDemo() {
           <div className="flex flex-col gap-5">
             <GlassCard className="relative flex flex-1 items-center justify-center !p-6">
               <LocationManager />
-              <SolarDial dayProgress={0.686} />
+              <img
+                src="/reloj-figma-adaptado.svg"
+                alt="Reloj astronómico de 24 horas"
+                className="h-auto w-full max-w-[520px] select-none drop-shadow-[0_24px_60px_oklch(0_0_0/0.55)]"
+                draggable={false}
+              />
             </GlassCard>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -93,6 +98,10 @@ export default function LovableDemo() {
             <CelestialPreviewCard />
           </div>
         </main>
+
+        <GlassCard className="flex items-center justify-center !p-6">
+          <SolarDial dayProgress={0.686} />
+        </GlassCard>
       </div>
     </div>
   )
