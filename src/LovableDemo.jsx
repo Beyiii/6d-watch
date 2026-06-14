@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { StarField } from './lovable/StarField.jsx'
 import { GlassCard, CardLabel } from './lovable/GlassCard.jsx'
 import { SolarDial } from './lovable/SolarDial.jsx'
@@ -8,6 +8,7 @@ import { SeasonCard } from './lovable/SeasonCard.jsx'
 import { CelestialPreviewCard } from './lovable/CelestialPreview.jsx'
 import {
   ChevronDownIcon,
+  GlobeIcon,
   LocationIcon,
   LogoIcon,
   MoonPhaseIcon,
@@ -74,8 +75,14 @@ export default function LovableDemo() {
           </div>
 
           <div className="flex flex-col gap-5">
-            <GlassCard className="flex flex-1 items-center justify-center !p-6">
-              <SolarDial dayProgress={0.686} />
+            <GlassCard className="relative flex flex-1 items-center justify-center !p-6">
+              <LocationManager />
+              <img
+                src="/reloj-figma-adaptado.svg"
+                alt="Reloj astronómico de 24 horas"
+                className="h-auto w-full max-w-[520px] select-none drop-shadow-[0_24px_60px_oklch(0_0_0/0.55)]"
+                draggable={false}
+              />
             </GlassCard>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -91,6 +98,10 @@ export default function LovableDemo() {
             <CelestialPreviewCard />
           </div>
         </main>
+
+        <GlassCard className="flex items-center justify-center !p-6">
+          <SolarDial dayProgress={0.686} />
+        </GlassCard>
       </div>
     </div>
   )
@@ -113,27 +124,94 @@ function Header({ onOpenSidebar }) {
         </h1>
       </button>
 
-      <button
-        type="button"
-        className="group flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors hover:bg-white/5"
-      >
-        <LocationIcon className="h-4 w-4 text-sun" />
-        <div className="flex flex-col items-start leading-tight">
-          <span className="font-medium">Santiago, Chile</span>
-          <span className="text-[0.7rem] text-muted-foreground">33.45° S, 70.66° O</span>
-        </div>
-        <ChevronDownIcon className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-y-0.5" />
-      </button>
-
       <div className="flex items-center gap-2">
-        <IconButton aria-label="Buscar">
-          <SearchIcon className="h-4 w-4" />
-        </IconButton>
+        <LanguageMenu />
         <IconButton aria-label="Ajustes">
           <SettingsIcon className="h-4 w-4" />
         </IconButton>
       </div>
     </header>
+  )
+}
+
+function LanguageMenu() {
+  const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const ref = useRef(null)
+
+  // Keep the menu mounted while it animates in and out.
+  useEffect(() => {
+    if (open) {
+      setMounted(true)
+      // Next frame: flip to the visible state to trigger the enter transition.
+      const id = requestAnimationFrame(() => setVisible(true))
+      return () => cancelAnimationFrame(id)
+    }
+    setVisible(false)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    function onPointerDown(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  const languages = [
+    { code: 'es', label: 'Español' },
+    { code: 'en', label: 'English' },
+  ]
+
+  return (
+    <div className="relative" ref={ref}>
+      <IconButton
+        aria-label="Seleccionar idioma"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <GlobeIcon className="h-4 w-4" />
+      </IconButton>
+
+      {mounted && (
+        <div
+          role="menu"
+          onTransitionEnd={() => {
+            // Unmount only after the closing transition finishes.
+            if (!visible) setMounted(false)
+          }}
+          className={[
+            'glass absolute right-0 z-50 mt-2 w-40 origin-top-right overflow-hidden rounded-2xl p-1.5 text-card-foreground',
+            'transition-[opacity,transform] duration-150 ease-out',
+            visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-1 scale-95',
+          ].join(' ')}
+        >
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              type="button"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors hover:bg-white/10"
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -146,6 +224,243 @@ function IconButton({ children, ...props }) {
     >
       {children}
     </button>
+  )
+}
+
+const SAVED_LOCATIONS = [
+  { id: 'scl', name: 'Santiago, Chile', coords: '33.45° S, 70.66° O', current: true },
+  { id: 'mad', name: 'Madrid, España', coords: '40.42° N, 3.70° O' },
+  { id: 'nyc', name: 'Nueva York, EE. UU.', coords: '40.71° N, 74.01° O' },
+  { id: 'tyo', name: 'Tokio, Japón', coords: '35.68° N, 139.69° E' },
+]
+
+const SEARCH_RESULTS = [
+  { id: 'lon', name: 'Londres', region: 'Inglaterra, Reino Unido' },
+  { id: 'par', name: 'París', region: 'Isla de Francia, Francia' },
+  { id: 'syd', name: 'Sídney', region: 'Nueva Gales del Sur, Australia' },
+  { id: 'cdmx', name: 'Ciudad de México', region: 'CDMX, México' },
+  { id: 'cai', name: 'El Cairo', region: 'Gobernación de El Cairo, Egipto' },
+]
+
+function LocationManager() {
+  const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [showSearch, setShowSearch] = useState(false)
+  const ref = useRef(null)
+
+  // Keep the menu mounted while it animates in and out.
+  useEffect(() => {
+    if (open) {
+      setMounted(true)
+      const id = requestAnimationFrame(() => setVisible(true))
+      return () => cancelAnimationFrame(id)
+    }
+    setVisible(false)
+  }, [open])
+
+  // Reset the secondary panel once the menu is fully closed.
+  useEffect(() => {
+    if (!open) {
+      const id = setTimeout(() => setShowSearch(false), 200)
+      return () => clearTimeout(id)
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    function onPointerDown(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') {
+        if (showSearch) setShowSearch(false)
+        else setOpen(false)
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open, showSearch])
+
+  return (
+    <div className="absolute left-4 top-4 z-30" ref={ref}>
+      <button
+        type="button"
+        aria-label="Administrar ubicación"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm backdrop-blur-md transition-colors hover:bg-white/10"
+      >
+        <LocationIcon className="h-4 w-4 text-sun" />
+        <span className="hidden font-medium sm:inline">Santiago, Chile</span>
+        <ChevronDownIcon
+          className={`h-4 w-4 text-muted-foreground transition-transform ${
+            open ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+
+      {mounted && (
+        <div
+          className={[
+            'absolute left-0 top-full mt-2 flex items-start gap-2',
+            'transition-[opacity,transform] duration-150 ease-out',
+            visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-1 scale-95',
+          ].join(' ')}
+          onTransitionEnd={() => {
+            if (!visible) setMounted(false)
+          }}
+        >
+          {/* Main panel: saved locations */}
+          <div
+            role="menu"
+            className="glass w-64 origin-top-left overflow-hidden rounded-2xl p-2 text-card-foreground"
+          >
+            <p className="px-2 pb-1.5 pt-1 text-[0.7rem] uppercase tracking-wider text-muted-foreground">
+              Ubicaciones guardadas
+            </p>
+            <div className="space-y-0.5">
+              {SAVED_LOCATIONS.map((loc) => (
+                <button
+                  key={loc.id}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                  className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-white/10"
+                >
+                  <LocationIcon
+                    className={`h-4 w-4 shrink-0 ${loc.current ? 'text-sun' : 'text-muted-foreground'}`}
+                  />
+                  <span className="flex min-w-0 flex-col leading-tight">
+                    <span className="truncate text-sm font-medium">{loc.name}</span>
+                    <span className="truncate text-[0.7rem] text-muted-foreground">
+                      {loc.coords}
+                    </span>
+                  </span>
+                  {loc.current && (
+                    <span className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-sun shadow-[0_0_6px] shadow-sun" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-2 border-t border-white/10 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowSearch((v) => !v)}
+                aria-expanded={showSearch}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-sun/15 px-3 py-2 text-sm font-medium text-sun transition-colors hover:bg-sun/25"
+              >
+                <PlusIcon className="h-4 w-4" />
+                Agregar ubicación
+              </button>
+            </div>
+          </div>
+
+          {/* Secondary panel: city search (slides in to the right of the main menu) */}
+          {showSearch && (
+            <LocationSearchPanel onClose={() => setShowSearch(false)} />
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function LocationSearchPanel({ onClose }) {
+  const [shown, setShown] = useState(false)
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
+  return (
+    <div
+      className={[
+        'glass w-64 origin-top-left overflow-hidden rounded-2xl p-2 text-card-foreground',
+        'transition-[opacity,transform] duration-150 ease-out',
+        shown ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2',
+      ].join(' ')}
+    >
+      <div className="flex items-center justify-between px-2 pb-1.5 pt-1">
+        <p className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">
+          Agregar ubicación
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Cerrar búsqueda"
+          className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+        >
+          <CloseIcon className="h-3.5 w-3.5" />
+        </button>
+      </div>
+
+      <div className="relative">
+        <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <input
+          type="text"
+          placeholder="Buscar ciudad, región o país"
+          className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-sun/40 focus:outline-none focus:ring-1 focus:ring-sun/30"
+        />
+      </div>
+
+      <div className="mt-2 space-y-0.5">
+        {SEARCH_RESULTS.map((res) => (
+          <button
+            key={res.id}
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-white/10"
+          >
+            <LocationIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span className="truncate text-sm font-medium">{res.name}</span>
+              <span className="truncate text-[0.7rem] text-muted-foreground">{res.region}</span>
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PlusIcon(props) {
+  return (
+    <svg
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  )
+}
+
+function CloseIcon(props) {
+  return (
+    <svg
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
   )
 }
 

@@ -82,6 +82,16 @@ export function SearchIcon(props) {
   )
 }
 
+export function GlobeIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3c2.5 2.4 3.9 5.6 4 9-0.1 3.4-1.5 6.6-4 9-2.5-2.4-3.9-5.6-4-9 0.1-3.4 1.5-6.6 4-9Z" />
+    </svg>
+  )
+}
+
 export function SettingsIcon(props) {
   return (
     <svg {...base} {...props}>
