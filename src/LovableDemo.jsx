@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import tzLookup from '@photostructure/tz-lookup'
+import { useClockData } from './hooks/useClockData.js'
+import GeoClockV2 from './components/GeoClockV2.jsx'
 import { StarField } from './lovable/StarField.jsx'
 import { GlassCard, CardLabel } from './lovable/GlassCard.jsx'
 import { SolarDial } from './lovable/SolarDial.jsx'
@@ -20,9 +23,16 @@ import {
 } from './lovable/icons.jsx'
 import './lovable/styles.css'
 
+const CLOCK_LOCATION = {
+  lat: -33.4489,
+  lon: -70.6693,
+  timezone: tzLookup(-33.4489, -70.6693),
+}
+
 export default function LovableDemo() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [section, setSection] = useState('reloj')
+  const { snapshot } = useClockData(CLOCK_LOCATION)
 
   useEffect(() => {
     document.documentElement.classList.add('lovable-route')
@@ -77,12 +87,13 @@ export default function LovableDemo() {
           <div className="flex flex-col gap-5">
             <GlassCard className="relative flex flex-1 items-center justify-center !p-6">
               <LocationManager />
-              <img
-                src="/reloj-figma-adaptado.svg"
-                alt="Reloj astronómico de 24 horas"
-                className="h-auto w-full max-w-[520px] select-none drop-shadow-[0_24px_60px_oklch(0_0_0/0.55)]"
-                draggable={false}
-              />
+              <div className="flex w-full max-w-[520px] items-center justify-center">
+                <GeoClockV2
+                  snapshot={snapshot}
+                  hemisphere={CLOCK_LOCATION.lat < 0 ? 'south' : 'north'}
+                  dialSize={480}
+                />
+              </div>
             </GlassCard>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

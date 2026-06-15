@@ -1,0 +1,47 @@
+/* Estilos aislados para GeoClockV2 (solo usados en /v2). */
+.geo2-dial-wrap {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  width: 100%;
+}
+
+.geo2-dial {
+  width: min(var(--geo-dial-size, 460px), 100%);
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.geo2-civil-number {
+  font-family: "Space Grotesk", "Sora", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  fill: oklch(0.8 0.03 250 / 0.55);
+  opacity: 0.95;
+}
+
+.geo2-civil-number.is-active {
+  fill: oklch(0.97 0.02 250 / 0.98);
+  opacity: 1;
+}
+
+.geo2-hour-label {
+  font-family: "Space Grotesk", "Sora", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  fill: oklch(0.98 0.01 250 / 0.96);
+  font-variant-numeric: tabular-nums;
+}
+
+.geo2-pointer-text {
+  font-family: "JetBrains Mono", "Sora", ui-monospace, monospace;
+  font-size: 14px;
+  font-weight: 500;
+  fill: oklch(0.97 0.02 250 / 0.95);
+  font-variant-numeric: tabular-nums;
+}
+
+.geo2-dial-wrap.is-clickable {
+  cursor: pointer;
+}
