@@ -15,7 +15,8 @@ L.Icon.Default.mergeOptions({
   shadowUrl,
 })
 
-export function createMap(container, onSelectLocation) {
+export function createMap(container, onSelectLocation, initialLat, initialLon, options = {}) {
+  const { overlayMode = 'compact' } = options
   const worldBounds = L.latLngBounds(
     L.latLng(-85, -180),
     L.latLng(85, 180),
@@ -54,19 +55,25 @@ export function createMap(container, onSelectLocation) {
     minZoom: 1,
   }).addTo(map)
 
-  const solarOverlay = createSolarTerminatorOverlay(map)
+  const solarOverlay = createSolarTerminatorOverlay(map, { mode: overlayMode })
 
   let marker
 
+  const updateMarker = (lat, lon) => {
+    if (marker) {
+      marker.setLatLng([lat, lon])
+    } else {
+      marker = L.marker([lat, lon]).addTo(map)
+    }
+  }
+
+  if (initialLat !== undefined && initialLon !== undefined) {
+    updateMarker(initialLat, initialLon)
+  }
+
   const onClick = (e) => {
     const { lat, lng } = e.latlng
-
-    if (marker) {
-      marker.setLatLng([lat, lng])
-    } else {
-      marker = L.marker([lat, lng]).addTo(map)
-    }
-
+    updateMarker(lat, lng)
     onSelectLocation(lat, lng)
   }
 
@@ -74,6 +81,7 @@ export function createMap(container, onSelectLocation) {
 
   return {
     map,
+    updateMarker,
     destroy() {
       map.off('click', onClick)
       map.off('drag', clampToBounds)

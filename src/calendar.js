@@ -7,7 +7,7 @@ import { getSolarEvents, getLunarData } from './astronomy.js'
 // Se determina por el mes, que es suficientemente preciso para uso cotidiano.
 // El hemisferio se infiere de la latitud: negativo = sur, positivo = norte.
 
-function getSeasonName(date, lat) {
+export function getSeasonName(date, lat) {
   const month = date.month  // 1–12 (Luxon DateTime)
 
   const isSouthern = lat < 0

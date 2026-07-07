@@ -1,41 +1,27 @@
 // src/MainApp.jsx
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DateTime } from 'luxon';
-import tzLookup from '@photostructure/tz-lookup';
+import { useEffect, useMemo, useState } from 'react';
 import { getDynamicBackgroundColors } from './core/background.js';
-import { useClockData } from './hooks/useClockData.js';
+import { useWatch } from './context/WatchContext.jsx';
 import GeoClock from './components/GeoClock.jsx';
 import Map from './components/Map.jsx';
 import SolarArc from './components/SolarArc.jsx';
 import Calendar from './components/Calendar.jsx';
 import CalendarInfo from './components/CalendarInfo.jsx';
 import ExperimentalFigmaClock from './components/ExperimentalFigmaClock.jsx';
-import { getCalendarDay } from './calendar.js';
-
-const INITIAL_LOCATION = {
-  lat: -33.4489,
-  lon: -70.6693,
-  timezone: tzLookup(-33.4489, -70.6693),
-};
 
 export default function MainApp() {
-  const [location, setLocation] = useState(INITIAL_LOCATION);
-  const { snapshot } = useClockData(location);
+  const {
+    location,
+    onSelectLocation,
+    snapshot,
+    calendarMonth,
+    setCalendarMonth,
+    selectedDate,
+    setSelectedDate,
+    calendarDayData,
+    timezoneLabel,
+  } = useWatch();
   const [geoModalOpen, setGeoModalOpen] = useState(false);
-  const [calendarMonth, setCalendarMonth] = useState(() =>
-    DateTime.now().setZone(INITIAL_LOCATION.timezone).startOf('month')
-  );
-  const [selectedDate, setSelectedDate] = useState(() =>
-    DateTime.now().setZone(INITIAL_LOCATION.timezone).startOf('day')
-  );
-
-  const onSelectLocation = useCallback((lat, lon) => {
-    const timezone = tzLookup(lat, lon);
-    setLocation({ lat, lon, timezone });
-    const now = DateTime.now().setZone(timezone);
-    setSelectedDate(now.startOf('day'));
-    setCalendarMonth(now.startOf('month'));
-  }, []);
 
   const bgColors = useMemo(() => {
     const gh = snapshot?.raw?.geometricHour;
@@ -58,15 +44,6 @@ export default function MainApp() {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [geoModalOpen]);
-
-  const calendarDayData = useMemo(() => {
-    const { lat, lon, timezone } = location;
-    return getCalendarDay(selectedDate.setZone(timezone), lat, lon, timezone);
-  }, [location, selectedDate]);
-
-  const timezoneLabel = useMemo(() => {
-    return `${location.timezone} · Lat ${location.lat.toFixed(4)} · Lon ${location.lon.toFixed(4)}`;
-  }, [location]);
 
   return (
     <div id="container">

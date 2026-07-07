@@ -1,24 +1,31 @@
+import { Link, useLocation } from 'react-router-dom'
 import { cn } from './lib/utils.js'
 import {
-  SunIcon,
-  MoonIcon,
-  LocationIcon,
-  SettingsIcon,
+  HomeIcon,
+  SunriseIcon,
+  CalendarIcon,
+  GlobeIcon,
   LogoIcon,
 } from './icons.jsx'
 import { X } from 'lucide-react'
 
-export function AppSidebar({ open, onClose, active, onSelect }) {
-  const menuItems = [
-    { id: 'reloj', label: 'Reloj Solar', icon: <SunIcon className="h-5 w-5" /> },
-    { id: 'astronomia', label: 'Astronomía', icon: <MoonIcon className="h-5 w-5" /> },
-    { id: 'ubicacion', label: 'Ubicación', icon: <LocationIcon className="h-5 w-5" /> },
-    { id: 'ajustes', label: 'Ajustes', icon: <SettingsIcon className="h-5 w-5" /> },
-  ]
+const menuItems = [
+  { id: 'inicio', label: 'Inicio', path: '/v2', icon: HomeIcon },
+  { id: 'dia', label: 'El Día', path: '/v2/dia', icon: SunriseIcon },
+  { id: 'calendario', label: 'Calendario', path: '/v2/calendario', icon: CalendarIcon },
+  { id: 'mapa', label: 'Mapa', path: '/v2/mapa', icon: GlobeIcon },
+]
+
+function isActivePath(pathname, itemPath) {
+  if (itemPath === '/v2') return pathname === '/v2'
+  return pathname.startsWith(itemPath)
+}
+
+export function AppSidebar({ open, onClose }) {
+  const { pathname } = useLocation()
 
   return (
     <>
-      {/* Overlay */}
       {open && (
         <div
           className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
@@ -26,7 +33,6 @@ export function AppSidebar({ open, onClose, active, onSelect }) {
         />
       )}
 
-      {/* Sidebar container */}
       <div
         className={cn(
           'fixed top-0 bottom-0 left-0 z-50 w-[280px] border-r border-white/10 bg-background/80 backdrop-blur-xl transition-all duration-300 ease-in-out flex flex-col p-6',
@@ -53,12 +59,13 @@ export function AppSidebar({ open, onClose, active, onSelect }) {
 
         <nav className="flex-1 space-y-2">
           {menuItems.map((item) => {
-            const isActive = active === item.id
+            const isActive = isActivePath(pathname, item.path)
+            const Icon = item.icon
             return (
-              <button
+              <Link
                 key={item.id}
-                type="button"
-                onClick={() => onSelect(item.id)}
+                to={item.path}
+                onClick={onClose}
                 className={cn(
                   'flex w-full items-center gap-3.5 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200',
                   isActive
@@ -66,9 +73,9 @@ export function AppSidebar({ open, onClose, active, onSelect }) {
                     : 'text-muted-foreground hover:bg-white/5 hover:text-foreground',
                 )}
               >
-                {item.icon}
+                <Icon className="h-5 w-5" />
                 {item.label}
-              </button>
+              </Link>
             )
           })}
         </nav>

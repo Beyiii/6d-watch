@@ -39,3 +39,28 @@ export function splitGeometricHMS(geometricHour) {
 
   return { h, m, s }
 }
+
+function parseCivilTimeToMinutes(civilTimeStr) {
+  const parts = civilTimeStr.split(':').map(Number)
+  if (parts.length < 2 || parts.some((n) => !Number.isFinite(n))) return null
+  return parts[0] * 60 + parts[1] + (parts[2] || 0) / 60
+}
+
+/** Diferencia geométrica − civil en minutos (misma convención horaria del día). */
+export function computeGeometricCivilDeltaMinutes(civilTimeStr, geometricHour) {
+  if (typeof geometricHour !== 'number' || !Number.isFinite(geometricHour)) return null
+  const civilMinutes = parseCivilTimeToMinutes(civilTimeStr)
+  if (civilMinutes == null) return null
+
+  let delta = geometricHour * 60 - civilMinutes
+  if (delta > 12 * 60) delta -= 24 * 60
+  if (delta < -12 * 60) delta += 24 * 60
+  return Math.round(delta)
+}
+
+export function formatGeometricCivilDelta(deltaMinutes) {
+  if (deltaMinutes == null || !Number.isFinite(deltaMinutes)) return null
+  if (deltaMinutes === 0) return '±0 min'
+  const sign = deltaMinutes > 0 ? '+' : '-'
+  return `${sign}${Math.abs(deltaMinutes)} min`
+}

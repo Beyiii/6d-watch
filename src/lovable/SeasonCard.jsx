@@ -47,37 +47,43 @@ export function SeasonCard({ current }) {
   const details = getSeasonDetails(current)
 
   return (
-    <GlassCard className="relative overflow-hidden group">
-      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl group-hover:bg-amber-500/20 transition-all duration-500" />
-
-      <div className="flex items-center justify-between">
-        <CardLabel>Estación actual</CardLabel>
-        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${details.color}`}>
-          {details.icon}
-        </span>
+    <GlassCard className="relative group">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl"
+      >
+        <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-all duration-500 group-hover:bg-amber-500/20" />
       </div>
 
-      <div className="mt-3">
-        <h3 className="text-2xl font-semibold tracking-tight">{details.name}</h3>
-        <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
-          <Calendar className="h-3 w-3 text-sun" />
-          {details.range}
-        </p>
-      </div>
-
-      <p className="mt-3 text-xs text-muted-foreground/90 leading-relaxed">{details.desc}</p>
-
-      {/* Progress Bar */}
-      <div className="mt-4 space-y-1.5">
-        <div className="flex items-center justify-between text-[10px]">
-          <span className="text-muted-foreground">Progreso de estación</span>
-          <span className="font-mono text-foreground font-medium">{details.progress}%</span>
+      <div className="relative">
+        <div className="flex items-center justify-between">
+          <CardLabel>Estación actual</CardLabel>
+          <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${details.color}`}>
+            {details.icon}
+          </span>
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-500"
-            style={{ width: `${details.progress}%` }}
-          />
+
+        <div className="mt-3">
+          <h3 className="text-2xl font-semibold tracking-tight">{details.name}</h3>
+          <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
+            <Calendar className="h-3 w-3 text-sun" />
+            {details.range}
+          </p>
+        </div>
+
+        <p className="mt-3 text-xs text-muted-foreground/90 leading-relaxed">{details.desc}</p>
+
+        <div className="mt-4 space-y-1.5">
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="text-muted-foreground">Progreso de estación</span>
+            <span className="font-mono text-foreground font-medium">{details.progress}%</span>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-500"
+              style={{ width: `${details.progress}%` }}
+            />
+          </div>
         </div>
       </div>
     </GlassCard>

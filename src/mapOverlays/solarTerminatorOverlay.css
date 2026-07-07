@@ -1,6 +1,5 @@
 .leaflet-solar-night,
-.leaflet-solar-twilight,
-.leaflet-solar-twilight-warm,
+.leaflet-solar-twilight-band,
 .leaflet-solar-glow-outer,
 .leaflet-solar-glow-mid,
 .leaflet-solar-glow-core {
@@ -8,48 +7,27 @@
 }
 
 /* =========================
-   NIGHT SHADOW
+   NIGHT SHADOW (compact map)
 ========================= */
 
 .leaflet-solar-night {
-  fill: rgba(12, 28, 74, 0.34);
   stroke: none;
   mix-blend-mode: multiply;
+  filter: blur(0.8px);
 }
 
 /* =========================
-   BLUE ATMOSPHERIC TWILIGHT
+   TWILIGHT BANDS (explore map)
+   Same tone as nested masks — each deeper zone adds another shadow layer.
 ========================= */
 
-.leaflet-solar-twilight {
-  fill: rgba(90, 140, 255, 0.10);
+.leaflet-solar-twilight-band {
   stroke: none;
-
-  filter: blur(48px);
-
-  opacity: 0.95;
-
-  mix-blend-mode: screen;
+  fill: rgb(12, 28, 74);
 }
 
 /* =========================
-   GOLDEN SUNSET LAYER
-========================= */
-
-.leaflet-solar-twilight-warm {
-  fill: rgba(255, 182, 92, 0.08);
-  stroke: none;
-
-  filter: blur(70px);
-
-  opacity: 0.85;
-
-  mix-blend-mode: screen;
-}
-
-/* =========================
-  BLUE TERMINATOR GLOW
-  (vector multi-stroke to avoid filter rasterization)
+  GOLDEN TERMINATOR GLOW
 ========================= */
 
 .leaflet-solar-glow-outer,
@@ -60,12 +38,54 @@
   stroke-linejoin: round;
   mix-blend-mode: screen;
   shape-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* =========================
-   OPTIONAL EXTRA SMOOTHNESS
+   ZONE TOOLTIP (explore map)
 ========================= */
 
-.leaflet-overlay-pane svg {
+.leaflet-solar-zone-tooltip {
+  background: rgba(8, 16, 36, 0.92);
+  border: 1px solid rgba(255, 165, 45, 0.35);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: rgba(240, 246, 255, 0.95);
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.45;
+  padding: 0;
+  pointer-events: none;
+}
+
+.leaflet-solar-zone-tooltip::before {
+  border-top-color: rgba(8, 16, 36, 0.92);
+}
+
+.leaflet-solar-zone-tooltip__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 11px;
+}
+
+.leaflet-solar-zone-tooltip__inner strong {
+  color: rgba(255, 178, 92, 0.95);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.leaflet-solar-zone-tooltip__coords {
+  color: rgba(180, 198, 230, 0.85);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* Glow paths only — do not style band fills here */
+.leaflet-solar-glow-outer,
+.leaflet-solar-glow-mid,
+.leaflet-solar-glow-core {
   shape-rendering: geometricPrecision;
+  vector-effect: non-scaling-stroke;
 }

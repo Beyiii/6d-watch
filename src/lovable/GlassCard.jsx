@@ -4,7 +4,7 @@ export function GlassCard({ className, children, ...props }) {
   return (
     <div
       className={cn(
-        'glass glass-hover rounded-2xl p-5 text-card-foreground',
+        'glass glass-hover relative overflow-visible rounded-2xl p-5 text-card-foreground',
         className,
       )}
       {...props}

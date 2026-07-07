@@ -1,4 +1,5 @@
 /** @type {import('react')} */
+import { buildMoonPhasePath } from '../core/moonPhasePath.js'
 
 const base = {
   fill: 'none',
@@ -47,19 +48,21 @@ export function MoonIcon(props) {
   )
 }
 
-export function MoonPhaseIcon({ phase = 0.34, ...props }) {
+export function MoonPhaseIcon({ phase = 0.34, hemisphere = 'north', ...props }) {
   const r = 10
-  const rx = Math.abs(0.5 - phase) * 2 * r
-  const waxing = phase < 0.5
+  const litPath = buildMoonPhasePath(phase, { cx: 12, cy: 12, r, hemisphere })
+
   return (
     <svg {...base} {...props}>
       <circle cx="12" cy="12" r={r} stroke="currentColor" fill="none" opacity="0.35" />
-      <path
-        d={`M 12 ${12 - r} A ${rx} ${r} 0 0 ${waxing ? 0 : 1} 12 ${12 + r} A ${r} ${r} 0 0 ${waxing ? 0 : 1} 12 ${12 - r} Z`}
-        fill="currentColor"
-        stroke="none"
-        opacity="0.9"
-      />
+      {litPath && (
+        <path
+          d={litPath}
+          fill="currentColor"
+          stroke="none"
+          opacity="0.9"
+        />
+      )}
     </svg>
   )
 }
@@ -105,6 +108,24 @@ export function ChevronDownIcon(props) {
   return (
     <svg {...base} {...props}>
       <path d="m6 9 6 6 6-6" />
+    </svg>
+  )
+}
+
+export function HomeIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 11.5 12 5l8 6.5" />
+      <path d="M6 10.5V19a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-8.5" />
+    </svg>
+  )
+}
+
+export function CalendarIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="4" y="5" width="16" height="16" rx="2" />
+      <path d="M4 9h16M8 3v4M16 3v4" />
     </svg>
   )
 }

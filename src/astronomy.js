@@ -82,13 +82,14 @@ export function getLunarData(date, lat, lon) {
 // Los umbrales son aproximados y dividen el ciclo en 8 fases tradicionales.
 
 function getPhaseName(phase) {
-  if (phase < 0.0625) return 'Luna nueva'
-  if (phase < 0.1875) return 'Creciente incipiente'
-  if (phase < 0.3125) return 'Cuarto creciente'
-  if (phase < 0.4375) return 'Creciente gibosa'
-  if (phase < 0.5625) return 'Luna llena'
-  if (phase < 0.6875) return 'Menguante gibosa'
-  if (phase < 0.8125) return 'Cuarto menguante'
-  if (phase < 0.9375) return 'Menguante incipiente'
-  return 'Luna nueva'
+  const tolerance = 0.03
+
+  if (phase < tolerance || phase > 1 - tolerance) return 'Luna nueva'
+  if (phase < 0.25 - tolerance) return 'Luna creciente'
+  if (phase <= 0.25 + tolerance) return 'Cuarto creciente'
+  if (phase < 0.5 - tolerance) return 'Luna gibosa creciente'
+  if (phase <= 0.5 + tolerance) return 'Luna llena'
+  if (phase < 0.75 - tolerance) return 'Luna gibosa menguante'
+  if (phase <= 0.75 + tolerance) return 'Cuarto menguante'
+  return 'Luna menguante'
 }
