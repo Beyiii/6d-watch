@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { DateTime } from 'luxon'
 import tzLookup from '@photostructure/tz-lookup'
+import { Preferences } from '@capacitor/preferences'
 import { useClockData } from '../hooks/useClockData.js'
 import { getCalendarDay } from '../calendar.js'
 import { geocodeReverse, cacheLocationName } from '../geocode.js'
@@ -20,6 +21,7 @@ export const DEFAULT_SAVED_LOCATIONS = [
 ]
 
 const LS_KEY = '6dw-saved-locations'
+const ACTIVE_LOCATION_KEY = '6dw-active-location'
 const MATCH_TOLERANCE = 0.05
 
 function loadSavedLocations() {
@@ -86,6 +88,7 @@ export function WatchProvider({ children }) {
 
   // Abort controller ref to cancel stale geocoding requests.
   const geocodeAbortRef = useRef(null)
+  const [hasLoadedActiveLocation, setHasLoadedActiveLocation] = useState(false)
 
   const { snapshot, nowLuxon } = useClockData(location)
 
@@ -126,10 +129,52 @@ export function WatchProvider({ children }) {
     })
   }, [])
 
-  // Geocode initial location on mount.
   useEffect(() => {
-    resolveLocationName(INITIAL_LOCATION.lat, INITIAL_LOCATION.lon, INITIAL_LOCATION.timezone)
-    return () => geocodeAbortRef.current?.abort()
+    let cancelled = false
+
+    async function loadActiveLocation() {
+      let restoredLocation = false
+
+      try {
+        const { value } = await Preferences.get({ key: ACTIVE_LOCATION_KEY })
+        if (cancelled) return
+
+        if (value) {
+          restoredLocation = true
+          const parsed = JSON.parse(value)
+          const lat = Number(parsed.lat)
+          const lon = Number(parsed.lon)
+          const timezone = typeof parsed.timezone === 'string' ? parsed.timezone : tzLookup(lat, lon)
+          const name = typeof parsed.name === 'string' ? parsed.name : null
+
+          if (Number.isFinite(lat) && Number.isFinite(lon) && timezone) {
+            setLocation({ lat, lon, timezone })
+            setSelectedDate(DateTime.now().setZone(timezone).startOf('day'))
+            setCalendarMonth(DateTime.now().setZone(timezone).startOf('month'))
+            setLocationName(name)
+
+            if (!name) {
+              resolveLocationName(lat, lon, timezone)
+            }
+          }
+        }
+      } catch {
+        // Ignore malformed stored data and keep the default location.
+      } finally {
+        if (!cancelled) {
+          if (!restoredLocation) {
+            resolveLocationName(INITIAL_LOCATION.lat, INITIAL_LOCATION.lon, INITIAL_LOCATION.timezone)
+          }
+          setHasLoadedActiveLocation(true)
+        }
+      }
+    }
+
+    loadActiveLocation()
+
+    return () => {
+      cancelled = true
+    }
   }, [resolveLocationName])
 
   const onSelectLocation = useCallback((lat, lon) => {
@@ -140,6 +185,22 @@ export function WatchProvider({ children }) {
     setCalendarMonth(now.startOf('month'))
     resolveLocationName(lat, lon, timezone)
   }, [resolveLocationName])
+
+  useEffect(() => {
+    if (!hasLoadedActiveLocation || locationName == null) return
+
+    const activeLocation = {
+      lat: location.lat,
+      lon: location.lon,
+      timezone: location.timezone,
+      name: locationName,
+    }
+
+    Preferences.set({
+      key: ACTIVE_LOCATION_KEY,
+      value: JSON.stringify(activeLocation),
+    }).catch(() => {})
+  }, [hasLoadedActiveLocation, location, locationName])
 
   const addSavedLocation = useCallback((name, lat, lon) => {
     const absLat = Math.abs(lat).toFixed(2)
@@ -184,6 +245,7 @@ export function WatchProvider({ children }) {
     () => ({
       location,
       locationName,
+      hasLoadedActiveLocation,
       setLocation,
       onSelectLocation,
       savedLocations,
@@ -202,6 +264,7 @@ export function WatchProvider({ children }) {
     [
       location,
       locationName,
+      hasLoadedActiveLocation,
       onSelectLocation,
       savedLocations,
       addSavedLocation,

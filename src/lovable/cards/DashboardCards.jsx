@@ -5,6 +5,7 @@ import {
   computeGeometricCivilDeltaMinutes,
   formatGeometricCivilDelta,
 } from '../../core/geometricTime.js'
+import { computeSolarCycleProgress } from '../../core/solarCycleProgress.js'
 import Map from '../../components/Map.jsx'
 import { LocationManager } from '../LocationManager.jsx'
 import { cn } from '../lib/utils.js'
@@ -34,6 +35,17 @@ const V2_SOLAR_TRAJECTORY = {
   radiusFactor: 1.48,
   viewPad: 2,
 }
+
+const SOLAR_TRAJECTORY_DAY_GRADIENT_STOPS = [
+  { offset: '0%', color: 'oklch(0.78 0.16 55)' },
+  { offset: '100%', color: 'oklch(0.88 0.15 80)' },
+]
+
+const SOLAR_TRAJECTORY_NIGHT_GRADIENT_STOPS = [
+  { offset: '0%', color: 'oklch(0.94 0.02 240)' },
+  { offset: '50%', color: 'oklch(0.78 0.06 250)' },
+  { offset: '100%', color: 'oklch(0.55 0.11 265)' },
+]
 
 function getSolarArcGeometry(horizonY) {
   const { width, marginX, radiusFactor } = V2_SOLAR_TRAJECTORY
@@ -178,6 +190,11 @@ function computeV2SolarTrajectory({ now, sunriseToday, solarNoon, sunsetToday, a
   }
 }
 
+function shouldFlipSolarTrajectoryGradient(isDay, lat) {
+  const isSouthernHemisphere = lat < 0
+  return isDay ? !isSouthernHemisphere : isSouthernHemisphere
+}
+
 export function SeasonBadge() {
   const { location, nowLuxon } = useWatch()
   const seasonName = getSeasonName(nowLuxon, location.lat)
@@ -240,11 +257,18 @@ export function CivilTimeCard({ compact, className }) {
   )
 }
 
+const GEO_TIME_BAR_DAY_GRADIENT =
+  'linear-gradient(90deg, oklch(0.78 0.16 55), oklch(0.88 0.15 80))'
+const GEO_TIME_BAR_NIGHT_GRADIENT =
+  'linear-gradient(90deg, oklch(0.92 0.03 245), oklch(0.68 0.10 265))'
+
 export function GeometricTimeCard({ compact, className }) {
-  const { snapshot, dayProgress } = useWatch()
+  const { snapshot } = useWatch()
   const { h, m } = snapshot.raw.geoHms
   const time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-  const pct = (dayProgress * 100).toFixed(1)
+  const { label: cycleLabel, progress: cycleProgress, isDay } =
+    computeSolarCycleProgress(snapshot)
+  const pct = (cycleProgress * 100).toFixed(1)
   const deltaMinutes = computeGeometricCivilDeltaMinutes(
     snapshot.ui.civilTime,
     snapshot.raw.geometricHour,
@@ -268,7 +292,7 @@ export function GeometricTimeCard({ compact, className }) {
       </div>
       <div className="space-y-1.5 w-full">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-muted-foreground">Día</span>
+          <span className="text-muted-foreground">{cycleLabel}</span>
           <span className="text-foreground">{pct}%</span>
         </div>
         <div className="h-1 overflow-hidden rounded-full bg-white/5">
@@ -276,7 +300,7 @@ export function GeometricTimeCard({ compact, className }) {
             className="h-full rounded-full"
             style={{
               width: `${pct}%`,
-              background: 'linear-gradient(90deg, oklch(0.78 0.16 55), oklch(0.88 0.15 80))',
+              background: isDay ? GEO_TIME_BAR_DAY_GRADIENT : GEO_TIME_BAR_NIGHT_GRADIENT,
             }}
           />
         </div>
@@ -424,6 +448,16 @@ export function SolarTrajectoryPlaceholder({ className }) {
     lat: location.lat,
     solarNoon: snapshot.raw.solarEvents?.solarNoon,
   })
+  const gradientStops = trajectory?.isDay
+    ? SOLAR_TRAJECTORY_DAY_GRADIENT_STOPS
+    : SOLAR_TRAJECTORY_NIGHT_GRADIENT_STOPS
+  const flipGradient = trajectory
+    ? shouldFlipSolarTrajectoryGradient(trajectory.isDay, location.lat)
+    : false
+  const gradLeftX = V2_SOLAR_TRAJECTORY.marginX
+  const gradRightX = V2_SOLAR_TRAJECTORY.width - V2_SOLAR_TRAJECTORY.marginX
+  const gradX1 = flipGradient ? gradRightX : gradLeftX
+  const gradX2 = flipGradient ? gradLeftX : gradRightX
 
   return (
     <GlassCard className={cn('flex min-h-0 flex-1 flex-col !p-3', className)}>
@@ -433,9 +467,23 @@ export function SolarTrajectoryPlaceholder({ className }) {
           <svg
             viewBox={trajectory.viewBox}
             preserveAspectRatio="xMidYMid meet"
-            className="block h-full min-h-0 w-full text-sun/70"
+            className="block h-full min-h-0 w-full text-white/35"
             aria-hidden="true"
           >
+            <defs>
+              <linearGradient
+                id="v2-solar-trajectory-grad"
+                gradientUnits="userSpaceOnUse"
+                x1={gradX1}
+                y1={trajectory.horizonY}
+                x2={gradX2}
+                y2={trajectory.horizonY}
+              >
+                {gradientStops.map(({ offset, color }) => (
+                  <stop key={offset} offset={offset} stopColor={color} />
+                ))}
+              </linearGradient>
+            </defs>
             <line
               x1={V2_SOLAR_TRAJECTORY.marginX}
               y1={trajectory.horizonY}
@@ -450,7 +498,7 @@ export function SolarTrajectoryPlaceholder({ className }) {
             <path
               d={trajectory.path}
               fill="none"
-              stroke="currentColor"
+              stroke="url(#v2-solar-trajectory-grad)"
               strokeWidth="1.6"
               vectorEffect="non-scaling-stroke"
               opacity="0.9"
@@ -459,7 +507,7 @@ export function SolarTrajectoryPlaceholder({ className }) {
               cx={trajectory.marker.x}
               cy={trajectory.marker.y}
               r="1.8"
-              fill="currentColor"
+              fill="url(#v2-solar-trajectory-grad)"
             />
           </svg>
         ) : (

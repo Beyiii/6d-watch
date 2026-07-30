@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import { WatchProvider } from './context/WatchContext.jsx'
 import MainApp from './MainApp.jsx'
 import LovableDemo from './LovableDemo.jsx'
@@ -12,7 +12,8 @@ export default function App() {
     <BrowserRouter>
       <WatchProvider>
         <Routes>
-          <Route path="/" element={<MainApp />} />
+          <Route path="/" element={<Navigate to="/v2" replace />} />
+          <Route path="/legacy" element={<MainApp />} />
           <Route path="/v2" element={<V2Layout />}>
             <Route index element={<LovableDemo />} />
             <Route path="dia" element={<DiaPage />} />

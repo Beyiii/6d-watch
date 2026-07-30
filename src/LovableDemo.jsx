@@ -46,7 +46,7 @@ export default function LovableDemo() {
           <GlassCard className="relative flex min-h-0 flex-[7] items-center justify-center p-4">
             <LocationBadge />
             <SeasonBadge />
-            <V2GeometricClock className="h-auto w-full max-h-[min(58dvh,500px)] select-none drop-shadow-[0_24px_60px_oklch(0_0_0/0.55)]" />
+            <V2GeometricClock className="h-full w-full min-h-0 select-none drop-shadow-[0_24px_60px_oklch(0_0_0/0.55)]" />
           </GlassCard>
 
           <SolarTrajectoryPlaceholder className="min-h-0 flex-[3]" />

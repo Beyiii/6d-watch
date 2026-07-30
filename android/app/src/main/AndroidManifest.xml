@@ -24,6 +24,37 @@
 
         </activity>
 
+        <receiver
+            android:name=".widget.D6WatchWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_name"
+            android:permission="android.permission.BIND_APPWIDGET">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.belen.clockapp.widget.ACTION_REFRESH_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/d6_watch_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.GeometricClockWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_geo_clock_name"
+            android:permission="android.permission.BIND_APPWIDGET">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.belen.clockapp.widget.ACTION_REFRESH_GEO_CLOCK_WIDGET" />
+                <action android:name="com.belen.clockapp.widget.svgclock.ACTION_REFRESH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/d6_watch_geo_clock_widget_info" />
+        </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -38,4 +69,6 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_geo_clock_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/widget_geo_clock_background">
+
+    <ImageView
+        android:id="@+id/widget_geo_clock_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:contentDescription="@string/widget_geo_clock_name"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/widget_geo_clock_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/widget_geo_clock_location_bg"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center"
+        android:paddingLeft="14dp"
+        android:paddingTop="8dp"
+        android:paddingRight="14dp"
+        android:paddingBottom="8dp"
+        android:text="@string/widget_geo_clock_loading"
+        android:textColor="#E8EEF7"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <!-- Nombre de ubicación: arriba, centrado; margen derecho para no chocar con recarga. -->
+    <TextView
+        android:id="@+id/widget_geo_clock_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/widget_geo_clock_location_bg"
+        android:clickable="false"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingLeft="10dp"
+        android:paddingTop="3dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="3dp"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="@string/widget_geo_clock_location_fallback"
+        android:textColor="#E8EEF7"
+        android:textSize="11sp" />
+
+    <!-- Botón de recarga: esquina superior derecha, sin desplazar el reloj. -->
+    <ImageView
+        android:id="@+id/widget_geo_clock_refresh"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/widget_geo_clock_refresh_bg"
+        android:contentDescription="@string/widget_geo_clock_refresh"
+        android:padding="9dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/widget_geo_clock_refresh_icon" />
+
+</FrameLayout>

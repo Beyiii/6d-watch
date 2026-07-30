@@ -18,19 +18,26 @@ export function useClockData(location) {
     return () => clearInterval(id)
   }, [timezone])
 
+  // Al cambiar de ubicación, React renderiza una vez antes de ejecutar el efecto
+  // anterior. No permitimos que ese render mezcle la nueva ubicación con la zona
+  // horaria anterior.
+  const zonedNowLuxon = nowLuxon.zoneName === timezone
+    ? nowLuxon
+    : DateTime.now().setZone(timezone)
+
   const dailyRef = useRef({ key: null, daily: null })
-  const dayKey = `${timezone}|${lat.toFixed(4)}|${lon.toFixed(4)}|${nowLuxon.toFormat('yyyy-MM-dd')}`
+  const dayKey = `${timezone}|${lat.toFixed(4)}|${lon.toFixed(4)}|${zonedNowLuxon.toFormat('yyyy-MM-dd')}`
 
   if (dailyRef.current.key !== dayKey) {
     dailyRef.current = {
       key: dayKey,
-      daily: computeDailyCelestial(nowLuxon.toJSDate(), location),
+      daily: computeDailyCelestial(zonedNowLuxon.toJSDate(), location),
     }
   }
 
   const snapshot = useMemo(() => {
-    return computeClockSnapshot(nowLuxon, location, dailyRef.current.daily)
-  }, [nowLuxon, location, dayKey])
+    return computeClockSnapshot(zonedNowLuxon, location, dailyRef.current.daily)
+  }, [zonedNowLuxon, location, dayKey])
 
-  return { nowLuxon, snapshot }
+  return { nowLuxon: zonedNowLuxon, snapshot }
 }

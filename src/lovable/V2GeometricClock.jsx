@@ -1,12 +1,14 @@
 import { useLayoutEffect, useRef } from 'react'
 
-import relojFigmaAdaptadoRaw from '../../public/reloj-figma-adaptado.svg?raw'
+import relojV2Raw from '../../public/reloj-v2.svg?raw'
 import { useWatch } from '../context/WatchContext.jsx'
 import { useAnimatedFigmaClock } from '../hooks/useAnimatedFigmaClock.js'
 import { cn } from './lib/utils.js'
 
+const CLOCK_DISPLAY_SCALE = 1.3
+
 export function V2GeometricClock({ className }) {
-  const { location, snapshot } = useWatch()
+  const { hasLoadedActiveLocation, location, snapshot } = useWatch()
   const wrapRef = useRef(null)
   const hemisphere = location.lat < 0 ? 'south' : 'north'
 
@@ -15,7 +17,7 @@ export function V2GeometricClock({ className }) {
     if (!wrap) return
 
     wrap.setAttribute('data-ready', '0')
-    wrap.innerHTML = relojFigmaAdaptadoRaw
+    wrap.innerHTML = relojV2Raw
 
     return () => {
       wrap.innerHTML = ''
@@ -24,18 +26,28 @@ export function V2GeometricClock({ className }) {
 
   useAnimatedFigmaClock({
     rootRef: wrapRef,
-    snapshot,
+    snapshot: hasLoadedActiveLocation ? snapshot : null,
     hemisphere,
     readyKey: 'v2-clock',
   })
 
   return (
-    <div
-      ref={wrapRef}
-      className={cn('v2-figma-clock', className)}
-      data-ready="0"
-      role="img"
-      aria-label="Reloj geométrico de 24 horas"
-    />
+    <div className={cn('v2-figma-clock-display', className)}>
+      <div
+        className="v2-figma-clock-scale"
+        style={{
+          transform: `scale(${CLOCK_DISPLAY_SCALE})`,
+          transformOrigin: 'center center',
+        }}
+      >
+        <div
+          ref={wrapRef}
+          className="v2-figma-clock"
+          data-ready="0"
+          role="img"
+          aria-label="Reloj geométrico de 24 horas"
+        />
+      </div>
+    </div>
   )
 }

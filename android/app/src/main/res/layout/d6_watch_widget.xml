@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/widget_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0D1B33"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="14dp"
+        android:paddingTop="12dp"
+        android:paddingRight="44dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/widget_title"
+            android:textColor="#F2F6FF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="6dp"
+            android:background="#E4A33D"
+            android:importantForAccessibility="no"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/widget_geometric_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/widget_geometric_time"
+            android:textColor="#F6B35A"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget_civil_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/widget_civil_time"
+            android:textColor="#9EB0CB"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/widget_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/widget_location_status"
+            android:textColor="#C7D3E8"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/widget_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/widget_state_status"
+            android:textColor="#C7D3E8"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Icono siempre visible en esquina; no depende del scroll del contenido. -->
+    <ImageView
+        android:id="@+id/widget_refresh"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/widget_geo_clock_refresh_bg"
+        android:contentDescription="@string/widget_refresh_action"
+        android:padding="9dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/widget_geo_clock_refresh_icon" />
+
+</FrameLayout>

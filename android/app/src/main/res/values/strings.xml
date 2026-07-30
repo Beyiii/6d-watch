@@ -4,4 +4,18 @@
     <string name="title_activity_main">6d-watch</string>
     <string name="package_name">com.belen.clockapp</string>
     <string name="custom_url_scheme">com.belen.clockapp</string>
+    <string name="widget_name">6D-Watch</string>
+    <string name="widget_title">6D-Watch</string>
+    <string name="widget_geometric_time">Hora geométrica --:--</string>
+    <string name="widget_civil_time">Hora civil --:--</string>
+    <string name="widget_location_status">Ubicación: Santiago</string>
+    <string name="widget_state_status">Estado: --</string>
+    <string name="widget_refresh_action">Actualizar</string>
+    <string name="widget_geo_clock_name">6D-Watch: Reloj geométrico</string>
+    <string name="widget_geo_clock_description">Reloj geométrico visual de 6D-Watch para la ubicación seleccionada.</string>
+    <string name="widget_geo_clock_refresh">Actualizar reloj geométrico</string>
+    <string name="widget_geo_clock_location_fallback">Ubicación seleccionada</string>
+    <string name="widget_geo_clock_loading">Cargando reloj…</string>
+    <string name="widget_geo_clock_error">No se pudo cargar el reloj</string>
+    <string name="widget_geo_clock_native_svg_error">Error SVG nativo</string>
 </resources>
