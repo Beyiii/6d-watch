@@ -7,9 +7,15 @@ import DiaPage from './watch-ui/pages/DiaPage.jsx'
 import CalendarioPage from './watch-ui/pages/CalendarioPage.jsx'
 import MapaPage from './watch-ui/pages/MapaPage.jsx'
 
+function getRouterBasename() {
+  const base = import.meta.env.BASE_URL
+  if (!base || base === '/' || base === './') return undefined
+  return base.endsWith('/') ? base.slice(0, -1) : base
+}
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={getRouterBasename()}>
       <WatchProvider>
         <Routes>
           <Route path="/" element={<Navigate to="/v2" replace />} />

@@ -7,9 +7,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:pages": "vite build --base /6d-watch/",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "preview:pages": "vite preview --base /6d-watch/",
+    "predeploy": "npm run build:pages",
+    "deploy": "gh-pages -d dist --dotfiles",
     "build:widget-clock": "node scripts/build-widget-clock-assets.mjs"
   },
   "devDependencies": {
