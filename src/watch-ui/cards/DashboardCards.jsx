@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useWatch, progressInWindow } from '../../context/WatchContext.jsx'
+import { useWatch } from '../../context/WatchContext.jsx'
 import { getSeasonName } from '../../calendar.js'
 import {
   computeGeometricCivilDeltaMinutes,
@@ -113,6 +113,10 @@ function lowerArcPath(geom, leftToRight) {
   return `M ${right.x} ${right.y} A ${r} ${r} 0 0 1 ${left.x} ${left.y}`
 }
 
+function arcPathToPoint(start, end, r, sweep) {
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 0 ${sweep} ${end.x} ${end.y}`
+}
+
 function buildViewBox(isDay, geom) {
   const { width, viewPad } = V2_SOLAR_TRAJECTORY
   const { horizonY, sagitta } = geom
@@ -168,31 +172,74 @@ function computeV2SolarTrajectory({ now, sunriseToday, solarNoon, sunsetToday, a
   if (isDay) {
     const leftToRight = !isSouthernHemisphere
     const progress = progressViaSolarNoon(now, sunriseToday, solarNoon, sunsetToday)
+    const start = leftToRight ? geom.left : geom.right
+    const sweep = leftToRight ? 1 : 0
+    const marker = pointOnUpperArc(progress, geom, leftToRight)
 
     return {
       isDay,
       horizonY,
+      progress,
       viewBox: buildViewBox(true, geom),
       path: upperArcPath(geom, leftToRight),
-      marker: pointOnUpperArc(progress, geom, leftToRight),
+      traveledPath: progress > 0 ? arcPathToPoint(start, marker, geom.r, sweep) : null,
+      marker,
     }
   }
 
   const leftToRight = isSouthernHemisphere
   const progress = progressBetween(now, activeSunset, activeNextSunrise)
+  const start = leftToRight ? geom.left : geom.right
+  const sweep = leftToRight ? 0 : 1
+  const marker = pointOnLowerArc(progress, geom, leftToRight)
 
   return {
     isDay,
     horizonY,
+    progress,
     viewBox: buildViewBox(false, geom),
     path: lowerArcPath(geom, leftToRight),
-    marker: pointOnLowerArc(progress, geom, leftToRight),
+    traveledPath: progress > 0 ? arcPathToPoint(start, marker, geom.r, sweep) : null,
+    marker,
   }
 }
 
 function shouldFlipSolarTrajectoryGradient(isDay, lat) {
   const isSouthernHemisphere = lat < 0
   return isDay ? !isSouthernHemisphere : isSouthernHemisphere
+}
+
+function getSolarTrajectoryCardinals(lat) {
+  const isSouthernHemisphere = lat < 0
+
+  if (isSouthernHemisphere) {
+    return { top: 'Norte', left: 'Oeste', right: 'Este' }
+  }
+
+  return { top: 'Sur', left: 'Este', right: 'Oeste' }
+}
+
+function SolarTrajectoryCardinalOverlay({ side, label }) {
+  if (side === 'top') {
+    return (
+      <span className="pointer-events-none absolute left-1/2 top-[20%] z-[1] -translate-x-1/2 -translate-y-1/2 text-[0.62rem] leading-none tracking-wide text-white/35">
+        {label}
+      </span>
+    )
+  }
+
+  return (
+    <span
+      className={cn(
+        'pointer-events-none absolute top-1/2 z-[1] flex -translate-y-1/2 flex-col items-center gap-[0.08em] text-[0.62rem] leading-none tracking-wide text-white/35',
+        side === 'left' ? 'left-1.5' : 'right-1.5',
+      )}
+    >
+      {label.split('').map((char, index) => (
+        <span key={`${label}-${index}`}>{char}</span>
+      ))}
+    </span>
+  )
 }
 
 export function SeasonBadge() {
@@ -266,9 +313,9 @@ export function GeometricTimeCard({ compact, className }) {
   const { snapshot } = useWatch()
   const { h, m } = snapshot.raw.geoHms
   const time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-  const { label: cycleLabel, progress: cycleProgress, isDay } =
+  const { label: cycleLabel, progress: cycleProgress, isDay, isPolar } =
     computeSolarCycleProgress(snapshot)
-  const pct = (cycleProgress * 100).toFixed(1)
+  const pct = isPolar ? null : (cycleProgress * 100).toFixed(1)
   const deltaMinutes = computeGeometricCivilDeltaMinutes(
     snapshot.ui.civilTime,
     snapshot.raw.geometricHour,
@@ -293,17 +340,19 @@ export function GeometricTimeCard({ compact, className }) {
       <div className="space-y-1.5 w-full">
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">{cycleLabel}</span>
-          <span className="text-foreground">{pct}%</span>
+          {pct != null ? <span className="text-foreground">{pct}%</span> : null}
         </div>
-        <div className="h-1 overflow-hidden rounded-full bg-white/5">
-          <div
-            className="h-full rounded-full"
-            style={{
-              width: `${pct}%`,
-              background: isDay ? GEO_TIME_BAR_DAY_GRADIENT : GEO_TIME_BAR_NIGHT_GRADIENT,
-            }}
-          />
-        </div>
+        {pct != null ? (
+          <div className="h-1 overflow-hidden rounded-full bg-white/5">
+            <div
+              className="h-full rounded-full"
+              style={{
+                width: `${pct}%`,
+                background: isDay ? GEO_TIME_BAR_DAY_GRADIENT : GEO_TIME_BAR_NIGHT_GRADIENT,
+              }}
+            />
+          </div>
+        ) : null}
       </div>
     </GlassCard>
   )
@@ -333,12 +382,6 @@ export function DurationCard({ label, value, className }) {
 export function GoldenHourCard() {
   const { snapshot } = useWatch()
   const { goldenPM } = snapshot.specialLight
-  const events = snapshot.raw.solarEvents
-  const progress = progressInWindow(
-    snapshot.raw.now,
-    events.goldenHourEveningStart,
-    events.goldenHourEveningEnd,
-  )
 
   return (
     <GlassCard className="!p-5">
@@ -352,7 +395,7 @@ export function GoldenHourCard() {
         <TimeStat label="Termina" value={snapshot.solar.sunset.local} />
       </div>
       <div className="mt-3">
-        <SolarArc variant="golden" progress={progress} />
+        <SolarArc variant="golden" progress={0.52} />
       </div>
     </GlassCard>
   )
@@ -361,12 +404,6 @@ export function GoldenHourCard() {
 export function BlueHourCard() {
   const { snapshot } = useWatch()
   const { blueAM } = snapshot.specialLight
-  const events = snapshot.raw.solarEvents
-  const progress = progressInWindow(
-    snapshot.raw.now,
-    events.blueHourMorningStart,
-    events.blueHourMorningEnd,
-  )
 
   return (
     <GlassCard className="!p-5">
@@ -380,7 +417,7 @@ export function BlueHourCard() {
         <TimeStat label="Termina" value={snapshot.solar.sunrise.local} />
       </div>
       <div className="mt-3">
-        <SolarArc variant="blue" progress={progress} />
+        <SolarArc variant="blue" progress={0.48} />
       </div>
     </GlassCard>
   )
@@ -437,17 +474,30 @@ export function LocationCard({ compact, prominent, className }) {
   )
 }
 
+function getPolarTrajectoryLabel(snapshot) {
+  const kind = snapshot?.solarCycle?.kind ?? snapshot?.raw?.solarWindow?.polarKind
+  if (kind === 'polar-night') return 'Noche polar'
+  if (kind === 'polar-day') return 'Día polar'
+  if (snapshot?.polar) {
+    return snapshot.raw?.solarWindow?.sunUpNow ? 'Día polar' : 'Noche polar'
+  }
+  return null
+}
+
 export function SolarTrajectoryPlaceholder({ className }) {
   const { location, snapshot } = useWatch()
-  const trajectory = computeV2SolarTrajectory({
-    now: snapshot.raw.now,
-    sunriseToday: snapshot.raw.sunriseToday,
-    sunsetToday: snapshot.raw.sunsetToday,
-    activeSunset: snapshot.raw.activeSunset,
-    activeNextSunrise: snapshot.raw.activeNextSunrise,
-    lat: location.lat,
-    solarNoon: snapshot.raw.solarEvents?.solarNoon,
-  })
+  const polarLabel = getPolarTrajectoryLabel(snapshot)
+  const trajectory = polarLabel
+    ? null
+    : computeV2SolarTrajectory({
+        now: snapshot.raw.now,
+        sunriseToday: snapshot.raw.sunriseToday,
+        sunsetToday: snapshot.raw.sunsetToday,
+        activeSunset: snapshot.raw.activeSunset,
+        activeNextSunrise: snapshot.raw.activeNextSunrise,
+        lat: location.lat,
+        solarNoon: snapshot.raw.solarEvents?.solarNoon,
+      })
   const gradientStops = trajectory?.isDay
     ? SOLAR_TRAJECTORY_DAY_GRADIENT_STOPS
     : SOLAR_TRAJECTORY_NIGHT_GRADIENT_STOPS
@@ -458,58 +508,81 @@ export function SolarTrajectoryPlaceholder({ className }) {
   const gradRightX = V2_SOLAR_TRAJECTORY.width - V2_SOLAR_TRAJECTORY.marginX
   const gradX1 = flipGradient ? gradRightX : gradLeftX
   const gradX2 = flipGradient ? gradLeftX : gradRightX
+  const cardinals = getSolarTrajectoryCardinals(location.lat)
 
   return (
     <GlassCard className={cn('flex min-h-0 flex-1 flex-col !p-3', className)}>
       <CardLabel>Trayectoria solar</CardLabel>
       <div className="relative mt-1.5 flex min-h-0 flex-1 items-stretch overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
-        {trajectory ? (
-          <svg
-            viewBox={trajectory.viewBox}
-            preserveAspectRatio="xMidYMid meet"
-            className="block h-full min-h-0 w-full text-white/35"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient
-                id="v2-solar-trajectory-grad"
-                gradientUnits="userSpaceOnUse"
-                x1={gradX1}
+        {polarLabel ? (
+          <div className="flex min-h-0 flex-1 items-center justify-center px-4">
+            <p className="text-sm font-medium tracking-tight text-muted-foreground">
+              {polarLabel}
+            </p>
+          </div>
+        ) : trajectory ? (
+          <>
+            <SolarTrajectoryCardinalOverlay side="top" label={cardinals.top} />
+            <SolarTrajectoryCardinalOverlay side="left" label={cardinals.left} />
+            <SolarTrajectoryCardinalOverlay side="right" label={cardinals.right} />
+            <svg
+              viewBox={trajectory.viewBox}
+              preserveAspectRatio="xMidYMid meet"
+              className="block h-full min-h-0 w-full text-white/35"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient
+                  id="v2-solar-trajectory-grad"
+                  gradientUnits="userSpaceOnUse"
+                  x1={gradX1}
+                  y1={trajectory.horizonY}
+                  x2={gradX2}
+                  y2={trajectory.horizonY}
+                >
+                  {gradientStops.map(({ offset, color }) => (
+                    <stop key={offset} offset={offset} stopColor={color} />
+                  ))}
+                </linearGradient>
+              </defs>
+              <line
+                x1={V2_SOLAR_TRAJECTORY.marginX}
                 y1={trajectory.horizonY}
-                x2={gradX2}
+                x2={V2_SOLAR_TRAJECTORY.width - V2_SOLAR_TRAJECTORY.marginX}
                 y2={trajectory.horizonY}
-              >
-                {gradientStops.map(({ offset, color }) => (
-                  <stop key={offset} offset={offset} stopColor={color} />
-                ))}
-              </linearGradient>
-            </defs>
-            <line
-              x1={V2_SOLAR_TRAJECTORY.marginX}
-              y1={trajectory.horizonY}
-              x2={V2_SOLAR_TRAJECTORY.width - V2_SOLAR_TRAJECTORY.marginX}
-              y2={trajectory.horizonY}
-              stroke="currentColor"
-              strokeWidth="1"
-              vectorEffect="non-scaling-stroke"
-              strokeDasharray="3 6"
-              opacity="0.35"
-            />
-            <path
-              d={trajectory.path}
-              fill="none"
-              stroke="url(#v2-solar-trajectory-grad)"
-              strokeWidth="1.6"
-              vectorEffect="non-scaling-stroke"
-              opacity="0.9"
-            />
-            <circle
-              cx={trajectory.marker.x}
-              cy={trajectory.marker.y}
-              r="1.8"
-              fill="url(#v2-solar-trajectory-grad)"
-            />
-          </svg>
+                stroke="currentColor"
+                strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
+                strokeDasharray="3 6"
+                opacity="0.35"
+              />
+              <path
+                d={trajectory.path}
+                fill="none"
+                stroke="url(#v2-solar-trajectory-grad)"
+                strokeWidth="1.2"
+                vectorEffect="non-scaling-stroke"
+                opacity="0.38"
+              />
+              {trajectory.traveledPath ? (
+                <path
+                  d={trajectory.traveledPath}
+                  fill="none"
+                  stroke="url(#v2-solar-trajectory-grad)"
+                  strokeWidth="2.6"
+                  vectorEffect="non-scaling-stroke"
+                  strokeLinecap="butt"
+                  opacity="0.95"
+                />
+              ) : null}
+              <circle
+                cx={trajectory.marker.x}
+                cy={trajectory.marker.y}
+                r="1.8"
+                fill="url(#v2-solar-trajectory-grad)"
+              />
+            </svg>
+          </>
         ) : (
           <div className="min-h-0 flex-1 w-full" aria-hidden="true" />
         )}

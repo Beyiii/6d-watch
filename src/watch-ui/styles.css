@@ -1,8 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500&display=swap");
 @import "tailwindcss" source(none);
 @source ".";
-@source "../LovableDemo.jsx";
-@source "../lovable/**/*.jsx";
+@source "../WatchUiHome.jsx";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -41,7 +40,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
-.lovable-root {
+.watch-ui-root {
   --radius: 0.875rem;
   --background: oklch(0.13 0.03 265);
   --foreground: oklch(0.97 0.01 250);
@@ -69,11 +68,11 @@
 }
 
 @layer base {
-  .lovable-root * {
+  .watch-ui-root * {
     border-color: var(--color-border);
   }
 
-  .lovable-root {
+  .watch-ui-root {
     min-height: 100vh;
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -83,7 +82,7 @@
 }
 
 /* Aislar /v2 del tema global de v1 (index.css) */
-body.lovable-route {
+body.watch-ui-route {
   margin: 0;
   background-color: oklch(0.13 0.03 265);
   background-image: none;
@@ -94,9 +93,9 @@ body.lovable-route {
   transition: none;
 }
 
-html.lovable-route,
-html.lovable-route body,
-html.lovable-route #root {
+html.watch-ui-route,
+html.watch-ui-route body,
+html.watch-ui-route #root {
   height: 100%;
 }
 
@@ -178,7 +177,7 @@ html.lovable-route #root {
 }
 
 /* SVG inline del reloj central de /v2; conserva el sizing del <img> original. */
-.lovable-root .v2-figma-clock-display {
+.watch-ui-root .v2-figma-clock-display {
   display: grid;
   place-items: center;
   width: 100%;
@@ -187,17 +186,17 @@ html.lovable-route #root {
   overflow: visible;
 }
 
-.lovable-root .v2-figma-clock-scale {
+.watch-ui-root .v2-figma-clock-scale {
   transform-origin: center center;
   overflow: visible;
   line-height: 0;
 }
 
-.lovable-root .v2-figma-clock {
+.watch-ui-root .v2-figma-clock {
   line-height: 0;
 }
 
-.lovable-root .v2-figma-clock svg {
+.watch-ui-root .v2-figma-clock svg {
   display: block;
   width: min(100%, calc(min(58dvh, 500px) * 907 / 916));
   height: auto;
@@ -206,11 +205,11 @@ html.lovable-route #root {
 }
 
 /* Mapa Leaflet embebido en tarjetas /v2 */
-.lovable-root .location-map-host {
+.watch-ui-root .location-map-host {
   width: 100%;
 }
 
-.lovable-root .location-map-host #map {
+.watch-ui-root .location-map-host #map {
   width: 100%;
   height: 100%;
   min-height: 0;
@@ -220,12 +219,12 @@ html.lovable-route #root {
   box-shadow: none;
 }
 
-.lovable-root .map-page-host {
+.watch-ui-root .map-page-host {
   width: 100%;
   min-height: 420px;
 }
 
-.lovable-root .map-page-host #map {
+.watch-ui-root .map-page-host #map {
   width: 100%;
   height: 100%;
   min-height: 420px;
@@ -233,7 +232,7 @@ html.lovable-route #root {
 }
 
 /* Leyenda compacta bajo el mapa principal (/v2/mapa) */
-.lovable-root .map-solar-legend {
+.watch-ui-root .map-solar-legend {
   margin-top: 0.875rem;
   padding: 0.75rem 0.875rem;
   border-radius: 0.875rem;
@@ -246,7 +245,7 @@ html.lovable-route #root {
   backdrop-filter: blur(12px) saturate(130%);
 }
 
-.lovable-root .map-solar-legend__list {
+.watch-ui-root .map-solar-legend__list {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.875rem 1.25rem;
@@ -256,25 +255,25 @@ html.lovable-route #root {
 }
 
 @media (min-width: 640px) {
-  .lovable-root .map-solar-legend__list {
+  .watch-ui-root .map-solar-legend__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1024px) {
-  .lovable-root .map-solar-legend__list {
+  .watch-ui-root .map-solar-legend__list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-.lovable-root .map-solar-legend__item {
+.watch-ui-root .map-solar-legend__item {
   display: flex;
   align-items: flex-start;
   gap: 0.625rem;
   min-width: 0;
 }
 
-.lovable-root .map-solar-legend__swatch {
+.watch-ui-root .map-solar-legend__swatch {
   flex-shrink: 0;
   width: 2rem;
   height: 1.25rem;
@@ -283,7 +282,7 @@ html.lovable-route #root {
   overflow: hidden;
 }
 
-.lovable-root .map-solar-legend__swatch--terminator {
+.watch-ui-root .map-solar-legend__swatch--terminator {
   position: relative;
   display: flex;
   align-items: center;
@@ -293,7 +292,7 @@ html.lovable-route #root {
   box-shadow: 0 0 12px rgb(255 165 45 / 0.15);
 }
 
-.lovable-root .map-solar-legend__terminator-glow {
+.watch-ui-root .map-solar-legend__terminator-glow {
   position: absolute;
   left: 0.2rem;
   right: 0.2rem;
@@ -303,7 +302,7 @@ html.lovable-route #root {
   filter: blur(1px);
 }
 
-.lovable-root .map-solar-legend__terminator-core {
+.watch-ui-root .map-solar-legend__terminator-core {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -319,38 +318,38 @@ html.lovable-route #root {
   box-shadow: 0 0 6px rgb(255 158 38 / 0.45);
 }
 
-.lovable-root .map-solar-legend__swatch--civil {
+.watch-ui-root .map-solar-legend__swatch--civil {
   background: color-mix(in oklab, rgb(100 140 200) 80%, transparent);
   border: 1px solid color-mix(in oklab, white 15%, transparent);
 }
 
-.lovable-root .map-solar-legend__swatch--nautical {
+.watch-ui-root .map-solar-legend__swatch--nautical {
   background: color-mix(in oklab, rgb(50 80 140) 80%, transparent);
   border: 1px solid color-mix(in oklab, white 10%, transparent);
 }
 
-.lovable-root .map-solar-legend__swatch--astronomical {
+.watch-ui-root .map-solar-legend__swatch--astronomical {
   background: color-mix(in oklab, rgb(25 45 90) 80%, transparent);
   border: 1px solid color-mix(in oklab, white 6%, transparent);
 }
 
-.lovable-root .map-solar-legend__swatch--night {
+.watch-ui-root .map-solar-legend__swatch--night {
   background: color-mix(in oklab, rgb(10 18 40) 90%, transparent);
   border: 1px solid color-mix(in oklab, white 4%, transparent);
 }
 
-.lovable-root .map-solar-legend__text {
+.watch-ui-root .map-solar-legend__text {
   min-width: 0;
 }
 
-.lovable-root .map-solar-legend__label {
+.watch-ui-root .map-solar-legend__label {
   margin: 0 0 0.25rem;
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.35;
 }
 
-.lovable-root .map-solar-legend__divider {
+.watch-ui-root .map-solar-legend__divider {
   margin: 0.625rem 0.25rem 0;
   border-top: 1px solid rgb(255 255 255 / 0.05);
 }

@@ -191,7 +191,7 @@ export function LocationManager({ onOpenChange }) {
               zIndex: 100,
             }}
             className={cn(
-              'lovable-root origin-top',
+              'watch-ui-root origin-top',
               'transition-[opacity,transform] duration-150 ease-out',
               visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-1 scale-95',
             )}

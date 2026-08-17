@@ -60,6 +60,23 @@ function hourAngle(lng, sunPos, gst) {
   return lst * 15 - sunPos.alpha
 }
 
+/** Visible map edge in Web Mercator (Leaflet clips ~±85.05). */
+export const MAP_MAX_LAT = 85
+
+function clampMapLat(lat) {
+  if (!Number.isFinite(lat)) return lat
+  return Math.max(-MAP_MAX_LAT, Math.min(MAP_MAX_LAT, lat))
+}
+
+function darkPoleLatitude(decDeg) {
+  return decDeg >= 0 ? -MAP_MAX_LAT : MAP_MAX_LAT
+}
+
+/** Solar altitude at the geographic night pole equals −|declination|. */
+function darkPoleInsideCap(decDeg, altitudeDeg) {
+  return -Math.abs(decDeg) < altitudeDeg
+}
+
 /** Same formula as leaflet.terminator — altitude exactly 0°. */
 export function terminatorLatitude(haDeg, decDeg) {
   const decRad = decDeg * D2R
@@ -68,11 +85,11 @@ export function terminatorLatitude(haDeg, decDeg) {
   return Math.atan(-Math.cos(haDeg * D2R) / Math.tan(decRad)) * R2D
 }
 
-/**
- * Latitude on the night side of `refLatDeg` where the Sun sits at `altitudeDeg`.
- * Ensures each twilight curve sits progressively closer to the dark pole.
- */
-function latitudeForAltitudeOnNightSide(haDeg, decDeg, altitudeDeg, refLatDeg) {
+function wrap180(deg) {
+  return ((((deg + 180) % 360) + 360) % 360) - 180
+}
+
+function latitudesForAltitude(haDeg, decDeg, altitudeDeg) {
   const ha = haDeg * D2R
   const dec = decDeg * D2R
   const alt = altitudeDeg * D2R
@@ -81,32 +98,92 @@ function latitudeForAltitudeOnNightSide(haDeg, decDeg, altitudeDeg, refLatDeg) {
   const b = Math.cos(dec) * Math.cos(ha)
   const c = Math.sin(alt)
   const R = Math.hypot(a, b)
-  if (R < 1e-12) return null
+  if (R < 1e-12) return []
 
   const ratio = c / R
-  if (ratio < -1 || ratio > 1) return null
+  if (ratio < -1 || ratio > 1) return []
 
   const base = Math.atan2(a, b)
   const spread = Math.acos(ratio)
-  const candidates = [
-    (base + spread) * R2D,
-    (base - spread) * R2D,
-  ]
+  const unique = []
 
+  for (const raw of [base + spread, base - spread]) {
+    const lat = wrap180(raw * R2D)
+    if (!Number.isFinite(lat) || lat < -90 || lat > 90) continue
+    if (unique.some((existing) => Math.abs(existing - lat) < 1e-6)) continue
+    unique.push(lat)
+  }
+
+  return unique
+}
+
+/**
+ * Latitude on the night side of `refLatDeg` where the Sun sits at `altitudeDeg`.
+ * Ensures each twilight curve sits progressively closer to the dark pole.
+ */
+function latitudeForAltitudeOnNightSide(haDeg, decDeg, altitudeDeg, refLatDeg) {
+  const candidates = latitudesForAltitude(haDeg, decDeg, altitudeDeg)
   const nightSouth = decDeg >= 0
   const towardNight = (lat) => (nightSouth ? lat < refLatDeg : lat > refLatDeg)
-
-  const valid = candidates.filter(
-    (lat) => Number.isFinite(lat) && lat >= -85 && lat <= 85 && towardNight(lat),
-  )
+  const valid = candidates.filter(towardNight)
 
   if (valid.length === 0) return null
 
-  // Pick the curve closest to the reference (outer edge of this band).
-  if (nightSouth) {
-    return valid.reduce((best, lat) => (lat > best ? lat : best))
+  return nightSouth
+    ? valid.reduce((best, lat) => (lat > best ? lat : best))
+    : valid.reduce((best, lat) => (lat < best ? lat : best))
+}
+
+function interpolateLngEdge(fromLng, toLng, lat, steps = 16) {
+  const pts = []
+  for (let i = 1; i < steps; i += 1) {
+    const t = i / steps
+    pts.push({ lat, lng: fromLng + (toLng - fromLng) * t })
   }
-  return valid.reduce((best, lat) => (lat < best ? lat : best))
+  return pts
+}
+
+function splitContiguousByLng(points, maxStep) {
+  if (!points?.length) return []
+
+  const segs = []
+  let current = [points[0]]
+
+  for (let i = 1; i < points.length; i += 1) {
+    if (Math.abs(points[i].lng - current[current.length - 1].lng) > maxStep) {
+      segs.push(current)
+      current = []
+    }
+    current.push(points[i])
+  }
+
+  if (current.length) segs.push(current)
+  return segs
+}
+
+/** Join a cap split across ±180 into one unwrapped chain. */
+function mergeAntimeridianSegments(segs, rangeHalf) {
+  if (segs.length !== 2) return segs
+
+  const [west, east] = segs
+  const westTouches = Math.abs(west[0].lng - (-rangeHalf)) <= 1
+  const eastTouches = Math.abs(east[east.length - 1].lng - rangeHalf) <= 1
+
+  if (!westTouches || !eastTouches) return segs
+
+  const unwrappedEast = east.map((p) => ({ lat: p.lat, lng: p.lng - 2 * rangeHalf }))
+  return [[...unwrappedEast, ...west]]
+}
+
+function buildCapRing(north, south, lngStep, rangeHalf) {
+  const northSegs = mergeAntimeridianSegments(splitContiguousByLng(north, lngStep * 2.5), rangeHalf)
+  const southSegs = mergeAntimeridianSegments(splitContiguousByLng(south, lngStep * 2.5), rangeHalf)
+
+  if (!northSegs[0]?.length) return []
+
+  const northChain = northSegs[0]
+  const southChain = southSegs[0]?.length ? [...southSegs[0]].reverse() : []
+  return [...northChain, ...southChain]
 }
 
 export function getSunEquatorialState(date) {
@@ -121,45 +198,122 @@ export function getSunEquatorialState(date) {
 }
 
 /**
- * Compute twilight curves aligned to leaflet.terminator at 0°.
+ * Compute twilight isolines independently so a missing inner altitude
+ * never punches holes in the terminator (those holes became diagonal fills).
  * @returns {Array<Array<{ lat: number, lng: number }>>}
  */
 export function computeTwilightCurves(date, resolution, longitudeRange) {
   const { sunEqPos, gst } = getSunEquatorialState(date)
   const steps = Math.round(longitudeRange * resolution)
-  const curves = TWILIGHT_ALTITUDES.map(() => [])
 
-  for (let i = 0; i <= steps; i += 1) {
-    const lng = -longitudeRange / 2 + i / resolution
-    const ha = hourAngle(lng, sunEqPos, gst)
-    const lat0 = terminatorLatitude(ha, sunEqPos.delta)
-    if (!Number.isFinite(lat0)) continue
-
-    const row = [lat0]
-    let valid = true
-
-    for (let a = 1; a < TWILIGHT_ALTITUDES.length; a += 1) {
-      const lat = latitudeForAltitudeOnNightSide(
-        ha,
-        sunEqPos.delta,
-        TWILIGHT_ALTITUDES[a],
-        row[a - 1],
+  return TWILIGHT_ALTITUDES.map((altitudeDeg) => {
+    if (darkPoleInsideCap(sunEqPos.delta, altitudeDeg) || altitudeDeg === 0) {
+      return sampleWrappingIsoline(
+        altitudeDeg,
+        sunEqPos,
+        gst,
+        steps,
+        resolution,
+        longitudeRange,
       )
-      if (lat == null) {
-        valid = false
-        break
-      }
-      row.push(lat)
     }
 
-    if (!valid) continue
+    return sampleCapIsoline(
+      altitudeDeg,
+      sunEqPos,
+      gst,
+      steps,
+      resolution,
+      longitudeRange,
+    ).north
+  })
+}
 
-    row.forEach((lat, idx) => {
-      curves[idx].push({ lat, lng })
-    })
+function sampleWrappingIsoline(altitudeDeg, sunEqPos, gst, steps, resolution, longitudeRange) {
+  const edgeLat = darkPoleLatitude(sunEqPos.delta)
+  const startLng = -longitudeRange / 2
+  const points = []
+
+  for (let i = 0; i <= steps; i += 1) {
+    const lng = startLng + i / resolution
+    const ha = hourAngle(lng, sunEqPos, gst)
+    let lat
+
+    if (altitudeDeg === 0) {
+      lat = terminatorLatitude(ha, sunEqPos.delta)
+    } else {
+      const terminatorLat = terminatorLatitude(ha, sunEqPos.delta)
+      const refLat = Number.isFinite(terminatorLat) ? terminatorLat : edgeLat
+      lat = latitudeForAltitudeOnNightSide(ha, sunEqPos.delta, altitudeDeg, refLat)
+    }
+
+    if (!Number.isFinite(lat)) {
+      lat = edgeLat
+    } else {
+      lat = clampMapLat(lat)
+    }
+
+    points.push({ lat, lng })
   }
 
-  return curves
+  return points
+}
+
+function sampleCapIsoline(altitudeDeg, sunEqPos, gst, steps, resolution, longitudeRange) {
+  const startLng = -longitudeRange / 2
+  const north = []
+  const south = []
+
+  for (let i = 0; i <= steps; i += 1) {
+    const lng = startLng + i / resolution
+    const ha = hourAngle(lng, sunEqPos, gst)
+    const lats = latitudesForAltitude(ha, sunEqPos.delta, altitudeDeg)
+      .map(clampMapLat)
+      .filter((lat) => Number.isFinite(lat))
+
+    if (!lats.length) continue
+
+    north.push({ lat: Math.max(...lats), lng })
+    south.push({ lat: Math.min(...lats), lng })
+  }
+
+  return { north, south }
+}
+
+/**
+ * Closed night-side polygons for nested twilight masks (0°, -6°, -12°, -18°).
+ * Wrapping isolines close along the visible map edge; polar caps that do not
+ * contain the geographic pole are drawn as closed ovals.
+ */
+export function computeTwilightNightRings(date, resolution, longitudeRange) {
+  const { sunEqPos, gst } = getSunEquatorialState(date)
+  const steps = Math.round(longitudeRange * resolution)
+  const lngStep = 1 / resolution
+  const rangeHalf = longitudeRange / 2
+
+  return TWILIGHT_ALTITUDES.map((altitudeDeg) => {
+    if (darkPoleInsideCap(sunEqPos.delta, altitudeDeg) || altitudeDeg === 0) {
+      const curve = sampleWrappingIsoline(
+        altitudeDeg,
+        sunEqPos,
+        gst,
+        steps,
+        resolution,
+        longitudeRange,
+      )
+      return buildNightRingBelow(curve, sunEqPos.delta, longitudeRange)
+    }
+
+    const { north, south } = sampleCapIsoline(
+      altitudeDeg,
+      sunEqPos,
+      gst,
+      steps,
+      resolution,
+      longitudeRange,
+    )
+    return buildCapRing(north, south, lngStep, rangeHalf)
+  })
 }
 
 /** Band polygon between two altitude curves (same longitude sampling). */
@@ -171,18 +325,27 @@ export function buildBandRing(outerCurve, innerCurve) {
   return [...outerCurve, ...innerRev]
 }
 
-/** Night region below `curve` closed toward the dark pole. */
+/**
+ * Night region below `curve`, closed along the visible dark-pole edge.
+ * Intermediate edge points prevent Leaflet from collapsing ±180 into a
+ * single antimeridian vertex and drawing a diagonal.
+ */
 export function buildNightRingBelow(curve, sunDeclination, longitudeRange) {
   if (!curve?.length) return []
 
-  const poleLat = sunDeclination >= 0 ? -90 : 90
+  const poleLat = darkPoleLatitude(sunDeclination)
   const startLng = -longitudeRange / 2
   const endLng = longitudeRange / 2
+  const first = curve[0]
+  const last = curve[curve.length - 1]
 
   return [
     { lat: poleLat, lng: startLng },
+    { lat: first.lat, lng: startLng },
     ...curve,
+    { lat: last.lat, lng: endLng },
     { lat: poleLat, lng: endLng },
+    ...interpolateLngEdge(endLng, startLng, poleLat),
   ]
 }
 

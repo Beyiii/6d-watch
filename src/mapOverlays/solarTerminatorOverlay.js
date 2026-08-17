@@ -4,9 +4,7 @@ import terminator from '@joergdietrich/leaflet.terminator'
 
 import {
   bandResolutionForZoom,
-  buildNightRingBelow,
-  computeTwilightCurves,
-  getSunEquatorialState,
+  computeTwilightNightRings,
   stripPoleClosingPoints,
   subsampleCurve,
 } from '../core/solarAltitudeCurve.js'
@@ -137,22 +135,11 @@ function distanceToCurvePixels(map, latlng, curve) {
 }
 
 function computeExploreBands(time, bandResolution) {
-  const { sunDeclination } = getSunEquatorialState(time)
-  const curves = computeTwilightCurves(time, bandResolution, BAND_LONGITUDE_RANGE).map((curve) =>
-    curve.map((p) => L.latLng(p.lat, p.lng)),
-  )
+  const rings = computeTwilightNightRings(time, bandResolution, BAND_LONGITUDE_RANGE)
 
-  // Draw nested shadow masks instead of exclusive strips:
-  // below 0°, below -6°, below -12°, below -18°.
-  // Because all masks share the same tone/opacity, deeper zones accumulate darkness.
-  const bands = [
-    buildNightRingBelow(curves[0], sunDeclination, BAND_LONGITUDE_RANGE),
-    buildNightRingBelow(curves[1], sunDeclination, BAND_LONGITUDE_RANGE),
-    buildNightRingBelow(curves[2], sunDeclination, BAND_LONGITUDE_RANGE),
-    buildNightRingBelow(curves[3], sunDeclination, BAND_LONGITUDE_RANGE),
-  ].map((ring) => ring.map((p) => L.latLng(p.lat, p.lng)))
+  const bands = rings.map((ring) => ring.map((p) => L.latLng(p.lat, p.lng)))
 
-  return { curves, bands }
+  return { bands }
 }
 
 export function createSolarTerminatorOverlay(map, options = {}) {
@@ -315,6 +302,9 @@ export function createSolarTerminatorOverlay(map, options = {}) {
   if (isExplore) {
     zoneTooltip = L.tooltip({
       sticky: true,
+      // We own show/hide. Leaflet's default non-permanent tooltip closes itself
+      // on map `preclick`, which desyncs our visibility flag after a location pick.
+      permanent: true,
       direction: 'top',
       offset: [0, -12],
       opacity: 1,
@@ -360,11 +350,10 @@ export function createSolarTerminatorOverlay(map, options = {}) {
 
   function setExploreBands(bands) {
     for (let i = 0; i < twilightBandLayers.length; i += 1) {
-      const ring = bands[i]
-      if (!ring.length) continue
+      const ring = bands[i] ?? []
 
-      const ringWest = shiftLngs(ring, -BAND_WORLD_SHIFT)
-      const ringEast = shiftLngs(ring, BAND_WORLD_SHIFT)
+      const ringWest = ring.length ? shiftLngs(ring, -BAND_WORLD_SHIFT) : []
+      const ringEast = ring.length ? shiftLngs(ring, BAND_WORLD_SHIFT) : []
 
       twilightBandLayers[i].center.setLatLngs(ring)
       twilightBandLayers[i].west.setLatLngs(ringWest)
@@ -440,10 +429,10 @@ export function createSolarTerminatorOverlay(map, options = {}) {
 
     zoneTooltip.setLatLng(e.latlng)
 
-    if (!tooltipVisible) {
+    if (!map.hasLayer(zoneTooltip)) {
       zoneTooltip.addTo(map)
-      tooltipVisible = true
     }
+    tooltipVisible = true
   }
 
   function onMouseMove(e) {

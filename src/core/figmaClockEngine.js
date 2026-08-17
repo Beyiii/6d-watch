@@ -98,7 +98,7 @@ function measureGeoRingSegmentIndex(el, ringCx, ringCy, resetTransforms = []) {
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
 
-// Referencia fija: docs/00.svg (viewBox 40Ã—26, Space Grotesk bold + borde blanco).
+// Referencia fija de minutos: viewBox 40×26, Space Grotesk bold + borde blanco.
 const MINUTES_FONT_FAMILY = "'Space Grotesk', sans-serif"
 const MINUTES_FONT_WEIGHT = '700'
 const MINUTES_FILL = '#363E46'

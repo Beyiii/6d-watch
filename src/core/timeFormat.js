@@ -1,17 +1,27 @@
 import { DateTime } from 'luxon'
 
+function isValidDate(date) {
+  return date instanceof Date && Number.isFinite(date.getTime())
+}
+
+function formatTimeInZone(date, timezone) {
+  if (!isValidDate(date)) return '-'
+  const dt = DateTime.fromJSDate(date).setZone(timezone)
+  if (!dt.isValid) return '-'
+  return dt.toFormat('HH:mm')
+}
+
 export function formatTimeDual(date, timezone) {
-  if (!date) return { local: '—', santiago: '—' }
+  if (!isValidDate(date)) return { local: '-', santiago: '-' }
 
-  const local = DateTime.fromJSDate(date).setZone(timezone).toFormat('HH:mm')
-  const santiago = DateTime.fromJSDate(date).setZone('America/Santiago').toFormat('HH:mm')
-
-  return { local, santiago }
+  return {
+    local: formatTimeInZone(date, timezone),
+    santiago: formatTimeInZone(date, 'America/Santiago'),
+  }
 }
 
 export function formatLocalTime(date, timezone) {
-  if (!date) return '—'
-  return DateTime.fromJSDate(date).setZone(timezone).toFormat('HH:mm')
+  return formatTimeInZone(date, timezone)
 }
 
 export function formatDuration(ms) {

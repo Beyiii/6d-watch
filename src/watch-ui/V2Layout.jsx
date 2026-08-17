@@ -11,16 +11,16 @@ export function V2Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
-    document.documentElement.classList.add('lovable-route')
-    document.body.classList.add('lovable-route')
+    document.documentElement.classList.add('watch-ui-route')
+    document.body.classList.add('watch-ui-route')
     return () => {
-      document.documentElement.classList.remove('lovable-route')
-      document.body.classList.remove('lovable-route')
+      document.documentElement.classList.remove('watch-ui-route')
+      document.body.classList.remove('watch-ui-route')
     }
   }, [])
 
   return (
-    <div className="lovable-root relative min-h-screen w-full text-foreground">
+    <div className="watch-ui-root relative min-h-screen w-full text-foreground">
       <StarField />
 
       <AppSidebar
@@ -165,7 +165,7 @@ function LanguageMenu() {
               zIndex: 100,
             }}
             className={cn(
-              'lovable-root origin-top',
+              'watch-ui-root origin-top',
               'transition-[opacity,transform] duration-150 ease-out',
               visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-1 scale-95',
             )}

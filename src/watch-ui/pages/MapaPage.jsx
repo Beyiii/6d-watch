@@ -6,7 +6,7 @@ import { getDisplayTimezone } from '../../core/timezoneDisplay.js'
 import { GlassCard, CardLabel } from '../GlassCard.jsx'
 import { LocationManager } from '../LocationManager.jsx'
 import { LocationComparison } from '../LocationComparison.jsx'
-import { PlaceholderPanel, PageTitle } from '../Placeholder.jsx'
+import { PageTitle } from '../Placeholder.jsx'
 import SolarMapLegend from '../SolarMapLegend.jsx'
 import { getActiveLocationLabel, getLoadingLocationLabel, matchSavedLocation } from '../locationDisplay.js'
 import { SunIcon, MoonIcon } from '../icons.jsx'
@@ -48,12 +48,6 @@ export default function MapaPage() {
 
         <div className="flex flex-col gap-4">
         <ActiveLocationCard />
-
-        <PlaceholderPanel
-          label="Visualización global de luz y oscuridad"
-          minHeight="min-h-[200px]"
-          hint="Mapa mundial de fotoperiodo"
-        />
         </div>
       </div>
     </main>

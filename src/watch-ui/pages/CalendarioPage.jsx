@@ -1,10 +1,11 @@
 import Calendar from '../../components/Calendar.jsx'
-import CalendarInfo from '../../components/CalendarInfo.jsx'
 import { useWatch } from '../../context/WatchContext.jsx'
+import { CalendarDayInfo } from '../CalendarDayInfo.jsx'
 import { CelestialPreviewCard } from '../CelestialPreview.jsx'
+import { DateComparison } from '../DateComparison.jsx'
 import { GlassCard, CardLabel } from '../GlassCard.jsx'
 import { SeasonCard } from '../SeasonCard.jsx'
-import { PlaceholderPanel, PageTitle } from '../Placeholder.jsx'
+import { PageTitle } from '../Placeholder.jsx'
 
 const SEASON_KEYS = {
   Primavera: 'primavera',
@@ -21,7 +22,6 @@ export default function CalendarioPage() {
     selectedDate,
     setSelectedDate,
     calendarDayData,
-    timezoneLabel,
   } = useWatch()
 
   const seasonKey = SEASON_KEYS[calendarDayData?.season] ?? 'otono'
@@ -51,18 +51,14 @@ export default function CalendarioPage() {
           </div>
         </GlassCard>
 
-        <PlaceholderPanel
-          label="Comparación entre fechas"
-          minHeight="min-h-[140px]"
-          hint="Comparar duración del día entre dos fechas"
-        />
+        <DateComparison />
       </div>
 
       <div className="flex flex-col gap-4">
         <GlassCard>
           <CardLabel>Información del día</CardLabel>
           <div className="mt-4">
-            <CalendarInfo dayData={calendarDayData} timezoneLabel={timezoneLabel} />
+            <CalendarDayInfo dayData={calendarDayData} />
           </div>
         </GlassCard>
 

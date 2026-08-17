@@ -1,6 +1,6 @@
-import { GlassCard } from './lovable/GlassCard.jsx'
-import { LocationBadge } from './lovable/LocationManager.jsx'
-import { V2GeometricClock } from './lovable/V2GeometricClock.jsx'
+import { GlassCard } from './watch-ui/GlassCard.jsx'
+import { LocationBadge } from './watch-ui/LocationManager.jsx'
+import { V2GeometricClock } from './watch-ui/V2GeometricClock.jsx'
 import {
   CivilTimeCard,
   CurrentDayCard,
@@ -11,9 +11,9 @@ import {
   SeasonBadge,
   SolarTrajectoryPlaceholder,
   SunriseSunsetCard,
-} from './lovable/cards/DashboardCards.jsx'
+} from './watch-ui/cards/DashboardCards.jsx'
 
-export default function LovableDemo() {
+export default function WatchUiHome() {
   return (
     <main className="
       grid flex-1 gap-4

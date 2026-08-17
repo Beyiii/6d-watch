@@ -30,10 +30,15 @@ export function getSeasonName(date, lat) {
   return isSouthern ? southernMap[northernSeason] : northernSeason
 }
 
+function isValidDate(date) {
+  return date instanceof Date && Number.isFinite(date.getTime())
+}
+
 // ─── formatDuration() ─────────────────────────────────────────────────────────
 // Convierte milisegundos a "Xh YYm".
 
 function formatDuration(ms) {
+  if (typeof ms !== 'number' || !Number.isFinite(ms) || ms < 0) return '-'
   const totalMinutes = Math.round(ms / 60000)
   const h  = Math.floor(totalMinutes / 60)
   const m  = totalMinutes % 60
@@ -41,11 +46,21 @@ function formatDuration(ms) {
 }
 
 // ─── formatTime() ─────────────────────────────────────────────────────────────
-// Formatea un Date a "HH:MM" en la zona horaria dada. Retorna '—' si es null.
+// Formatea un Date a "HH:MM" en la zona horaria dada. Retorna '-' si no es válido
+// (incluye casos polares donde SunCalc entrega Invalid Date).
 
 function formatTime(date, timezone) {
-  if (!date) return '—'
-  return DateTime.fromJSDate(date).setZone(timezone).toFormat('HH:mm')
+  if (!isValidDate(date)) return '-'
+  const dt = DateTime.fromJSDate(date).setZone(timezone)
+  if (!dt.isValid) return '-'
+  return dt.toFormat('HH:mm')
+}
+
+function formatTimeRange(start, end, timezone) {
+  const from = formatTime(start, timezone)
+  const to = formatTime(end, timezone)
+  if (from === '-' || to === '-') return '-'
+  return `${from} → ${to}`
 }
 
 // ─── getCalendarDay() ─────────────────────────────────────────────────────────
@@ -95,10 +110,10 @@ export function getCalendarDay(luxonDate, lat, lon, timezone) {
     nightLength:    formatDuration(nightLengthMs),
 
     // ── Luz especial ────────────────────────────────────────────────────────
-    goldenHourMorning: `${formatTime(solar.goldenHourMorningStart, timezone)} → ${formatTime(solar.goldenHourMorningEnd, timezone)}`,
-    goldenHourEvening: `${formatTime(solar.goldenHourEveningStart, timezone)} → ${formatTime(solar.goldenHourEveningEnd, timezone)}`,
-    blueHourMorning:   `${formatTime(solar.blueHourMorningStart,   timezone)} → ${formatTime(solar.blueHourMorningEnd,   timezone)}`,
-    blueHourEvening:   `${formatTime(solar.blueHourEveningStart,   timezone)} → ${formatTime(solar.blueHourEveningEnd,   timezone)}`,
+    goldenHourMorning: formatTimeRange(solar.goldenHourMorningStart, solar.goldenHourMorningEnd, timezone),
+    goldenHourEvening: formatTimeRange(solar.goldenHourEveningStart, solar.goldenHourEveningEnd, timezone),
+    blueHourMorning:   formatTimeRange(solar.blueHourMorningStart,   solar.blueHourMorningEnd,   timezone),
+    blueHourEvening:   formatTimeRange(solar.blueHourEveningStart,   solar.blueHourEveningEnd,   timezone),
 
     // ── Luna ────────────────────────────────────────────────────────────────
     moonPhase:      lunar.phaseName,
